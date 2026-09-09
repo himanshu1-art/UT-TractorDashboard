@@ -47,8 +47,7 @@ header.topbar .sub{font-size:12px; color:#B9CBDD; margin-top:2px;}
 .kpi-amount{font-size:11px; color:var(--muted); margin-top:3px;}
 .kpi.neg .kpi-val{color:var(--red);}
 
-.layout{display:grid; grid-template-columns:260px 1fr; gap:18px; align-items:start;}
-@media (max-width:1000px){ .layout{grid-template-columns:1fr;} }
+.layout{display:block;}
 
 .panel{
   background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px;
@@ -56,18 +55,19 @@ header.topbar .sub{font-size:12px; color:#B9CBDD; margin-top:2px;}
 }
 .panel h2{font-size:14px; margin:0 0 12px; color:var(--navy); font-weight:700; display:flex; justify-content:space-between; align-items:center;}
 
-#filterBar{max-height:calc(100vh - 220px); overflow-y:auto; padding-right:4px;}
-.filter-group{margin-bottom:14px;}
-.filter-title{font-size:11.5px; font-weight:700; color:var(--navy-2); margin-bottom:6px; text-transform:uppercase; letter-spacing:.4px;}
+#filterBar{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; align-items:start;}
+.filter-group{margin:0; position:relative; min-width:0;}
+.filter-title{width:100%; min-height:34px; display:flex; align-items:center; justify-content:flex-start; gap:5px; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:#F8FBFC; color:var(--navy-2); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; cursor:pointer; text-align:left;}
+.filter-title::after{content:'▾'; color:var(--muted); font-size:10px; transition:transform .12s;}
+.filter-group.open .filter-title::after{transform:rotate(180deg);}
+.filter-title:hover{border-color:var(--teal); background:#F1FAF8;}
+.filter-options{display:none; position:absolute; z-index:10; top:calc(100% + 6px); left:0; min-width:100%; max-width:300px; max-height:300px; overflow:auto; padding:9px; background:#fff; border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 20px rgba(15,42,71,.12);}
+.filter-group.open .filter-options{display:block;}
+.filter-group.open{z-index:11;}
 .badge{background:var(--teal); color:#fff; border-radius:9px; padding:0 6px; font-size:10px; margin-left:4px;}
-.chip-row{display:flex; flex-wrap:wrap; gap:6px;}
-.chip{
-  border:1px solid var(--border); background:#fff; color:var(--text); font-size:11.5px;
-  padding:4px 9px; border-radius:14px; cursor:pointer; transition:.12s;
-}
-.chip:hover{border-color:var(--teal);}
-.chip.active{background:var(--navy); color:#fff; border-color:var(--navy);}
-.month-select{width:100%; height:34px; padding:5px 8px; border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text); font-size:12px;}
+.checkbox-list{display:grid; gap:6px;}
+.checkbox-option{display:flex; align-items:flex-start; gap:7px; color:var(--text); font-size:11.5px; line-height:1.25; cursor:pointer;}
+.checkbox-option input{width:14px; height:14px; flex:0 0 auto; margin:0; accent-color:var(--teal);}
 .clear-btn{
   width:100%; margin-top:4px; padding:8px; background:transparent; border:1px dashed var(--muted);
   border-radius:8px; color:var(--muted); font-size:12px; cursor:pointer;
@@ -86,7 +86,10 @@ table.datatable td{padding:6px 10px; text-align:right; border-bottom:1px solid v
 table.datatable tbody tr:hover{background:#F8FBFA;}
 .grp1-row{cursor:pointer; background:var(--teal-lt); font-weight:600;}
 .grp1-row:hover{background:#DCF0EC;}
-.grp2-row td.lbl.sub{padding-left:30px; color:var(--muted); font-weight:400;}
+.grp2-row{cursor:pointer;}
+.grp2-row:hover{background:#F3F8F7;}
+.grp2-row td.lbl.sub{padding-left:26px; color:var(--navy-2); font-weight:600;}
+.grp3-row td.lbl.sub2{padding-left:48px; color:var(--muted); font-weight:400;}
 .caret{display:inline-block; width:14px; color:var(--teal);}
 td.neg{background:var(--red-bg); color:var(--red); font-weight:700;}
 td.neg-soft{color:var(--red);}
@@ -125,10 +128,18 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
   background:#FBFCFD; border:1px solid var(--border); border-radius:8px; padding:10px 12px 4px;
   height:230px; position:relative; overflow:hidden;
 }
-.chart-box.small{height:200px;}
+.chart-box.small{height:220px;}
 .chart-title{font-size:12px; font-weight:600; color:var(--navy-2); margin-bottom:4px;}
 .chart-box canvas{display:block; width:100% !important; height:180px !important; max-height:none;}
-.chart-box.small canvas{height:155px !important;}
+.chart-box.small canvas{height:170px !important;}
+.source-mix-wrap{display:flex; align-items:center; justify-content:space-between; gap:8px; height:calc(100% - 26px);}
+.source-mix-wrap canvas{flex:1 1 auto; width:100% !important; max-width:170px; height:160px !important; margin:0 auto;}
+.source-mix-legend{display:flex; flex-direction:column; justify-content:center; gap:8px; min-width:135px; max-width:150px; font-size:11px; color:var(--navy-2);}
+.source-mix-item{display:flex; align-items:center; gap:7px; line-height:1.2;}
+.source-swatch{width:10px; height:10px; border-radius:50%; display:inline-block; flex:0 0 auto;}
+.source-mix-meta{display:flex; flex-direction:column; gap:1px; min-width:0;}
+.source-mix-meta strong{font-size:11px; color:var(--navy); font-weight:700;}
+.source-mix-meta span{font-size:10.5px; color:var(--muted);}
 
 /* ---- procurement / overbid cards ---- */
 .proc-cards{display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; align-items:stretch;}
@@ -235,6 +246,10 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
 }
 .chat-launch-btn:hover{background:#0A6459;}
 
+.insights-floater{position:fixed; right:20px; top:50%; transform:translateY(-50%); z-index:900; width:48px; height:48px; border:0; border-radius:50%; background:var(--teal); color:#fff; font-size:21px; cursor:pointer; box-shadow:0 4px 14px rgba(15,42,71,.24);}
+.insights-floater:hover{background:#0A6459; transform:translateY(-50%) scale(1.05);}
+@media (max-width:600px){.insights-floater{right:12px; width:44px; height:44px;}}
+
 /* ---- full-page AI chat ---- */
 .chat-fullpage{
   display:none; position:fixed; inset:0; background:var(--bg); z-index:1000;
@@ -272,13 +287,12 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
   <header class="topbar">
     <div>
       <h1>Used Tractor — Deal Analytics</h1>
-      <div class="sub">Transaction-level dashboard · ask the AI agent below to reshape it</div>
+      <div class="sub">Transaction-level dashboard · filter the data and open AI Insights when needed</div>
     </div>
     <div style="display:flex; align-items:center;">
       <div id="rowCount"></div>
       <button class="chat-launch-btn" id="openTable1Btn">▦ Model / Center</button>
-      <button class="chat-launch-btn" id="openInsightsBtn">✦ AI Insights</button>
-      <button class="chat-launch-btn" id="openChatBtn">💬 AI Chat</button>
+      <button class="chat-launch-btn" id="openPnlBtn">📊 Company P&amp;L</button>
     </div>
   </header>
 
@@ -319,12 +333,10 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
   </div>
 
   <div class="layout">
-    <div class="filters-col">
-      <div class="panel">
-        <h2>Filters</h2>
-        <div id="filterBar"></div>
-        <button class="clear-btn" id="clearFiltersBtn">Clear all filters</button>
-      </div>
+    <div class="panel filters-panel">
+      <h2>Filters</h2>
+      <div id="filterBar"></div>
+      <button class="clear-btn" id="clearFiltersBtn">Clear all filters</button>
     </div>
 
     <div class="main-col">
@@ -338,7 +350,7 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
           <div class="chart-box"><div class="chart-title">State-wise Margin Comparison</div><canvas id="chartState"></canvas></div>
           <div class="chart-box"><div class="chart-title">Top 10 Models — Volume &amp; TM%</div><canvas id="chartModels"></canvas></div>
           <div class="chart-box"><div class="chart-title">Ageing Distribution &amp; CM-1% Impact</div><canvas id="chartAgeing"></canvas></div>
-          <div class="chart-box small"><div class="chart-title">Source Mix</div><canvas id="chartSource"></canvas></div>
+          <div class="chart-box small"><div class="chart-title">Source Mix</div><div class="source-mix-wrap"><canvas id="chartSource"></canvas><div id="chartSourceLegend" class="source-mix-legend"></div></div></div>
         </div>
       </div>
 
@@ -365,6 +377,8 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
     </div>
   </div>
 </div>
+
+<button class="insights-floater" id="openInsightsBtn" type="button" title="Open AI Insights" aria-label="Open AI Insights">✦</button>
 
 <div class="chat-fullpage table1-fullpage" id="table1Fullpage">
   <div class="chat-fullpage-header">
@@ -397,21 +411,122 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
   </div>
 </div>
 
-<div class="chat-fullpage" id="chatFullpage">
+<style>
+.pnl-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
+.pnl-controls .grp{display:flex;flex-direction:column;gap:4px;}
+.pnl-controls label{font-size:11px;font-weight:700;color:var(--navy-2);text-transform:uppercase;letter-spacing:.4px;}
+.pnl-select{font-size:13px;font-weight:600;color:var(--navy);background:#F8FBFC;border:1px solid var(--border);border-radius:7px;padding:7px 28px 7px 10px;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%235B7185'/></svg>");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;min-width:110px;}
+.pnl-vs{font-weight:700;color:var(--muted);font-size:13px;}
+.pnl-swap{margin-left:auto;background:var(--teal-lt);color:var(--teal);border:none;border-radius:7px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.pnl-swap:hover{background:#DCF0EC;}
+.pnl-banner{display:flex;gap:10px;align-items:flex-start;background:#FEF6E9;border:1px solid #F0D9A6;color:#8A5A00;border-radius:8px;padding:10px 14px;font-size:12.5px;margin-bottom:14px;}
+.pnl-kpi-bar{margin-bottom:16px;}
+.pnl-trend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+@media (max-width:820px){.pnl-trend-grid{grid-template-columns:1fr;}}
+.pnl-trend-card{background:#FBFCFD;border:1px solid var(--border);border-radius:8px;padding:10px 12px 8px;position:relative;}
+.pnl-trend-card .th{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--navy-2);margin-bottom:2px;}
+.pnl-trend-card .u{font-size:10px;color:var(--muted);font-weight:400;}
+.pnl-trend-legend{display:flex;gap:12px;font-size:10px;color:var(--muted);margin-top:2px;}
+.pnl-trend-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
+.pnl-tt{position:absolute;pointer-events:none;background:var(--navy);color:#fff;font-size:11px;padding:4px 7px;border-radius:5px;transform:translate(-50%,-130%);white-space:nowrap;opacity:0;transition:opacity .1s;z-index:5;}
+.pnl-table td.remark{color:var(--muted);font-size:12px;text-align:left;white-space:normal;max-width:320px;min-width:200px;}
+.pnl-table tr.section-row td{background:#EFF3F6;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+.pnl-table tr.indent td.metric{padding-left:26px;font-style:italic;color:var(--muted);}
+.pnl-table td.num .sub{display:block;font-size:10px;color:#8A97A3;font-weight:400;}
+</style>
+
+<style>
+.pnl-viewtabs{display:flex;gap:8px;margin-bottom:16px;border-bottom:1px solid var(--border);}
+.pnl-viewtab{background:none;border:none;border-bottom:2px solid transparent;padding:8px 4px 10px;margin-bottom:-1px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit;}
+.pnl-viewtab:hover{color:var(--navy);}
+.pnl-viewtab.active{color:var(--navy);border-bottom-color:var(--teal);}
+.pnl-heatmap-hint{font-size:11px;color:var(--muted);margin-left:auto;align-self:center;max-width:280px;}
+.pnl-insights{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.pnl-insight-chip{background:#F8FBFC;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:12px;color:var(--navy-2);}
+.pnl-insight-chip b{color:var(--navy);}
+.pnl-insight-chip.good b{color:var(--green);}
+.pnl-insight-chip.bad b{color:var(--red);}
+.pnl-state-table th.total-col, .pnl-state-table td.total-col{background:#FBEEC7;}
+.pnl-state-table th.total-col{color:var(--navy);}
+.pnl-state-table td.total-col{font-weight:700;}
+</style>
+
+<style>
+.pnl-monthpicker{min-width:160px;}
+.pnl-monthpicker .filter-title{min-width:160px;}
+.pnl-monthpicker .filter-options{min-width:200px;max-height:280px;}
+.pnl-table tr[data-toggle]{cursor:pointer;}
+.pnl-table tr[data-toggle]:hover td{filter:brightness(0.97);}
+.pnl-table tr.section-row[data-toggle] td{cursor:pointer;}
+</style>
+
+<div class="chat-fullpage insights-fullpage" id="companyPnlFullpage">
   <div class="chat-fullpage-header">
     <div>
-      <h2>Ask the AI agent to reshape this dashboard</h2>
-      <div class="sub">Full chat view — your dashboard keeps running in the background</div>
+      <h2>Company P&amp;L</h2>
+      <div class="sub">Month-on-month centre P&amp;L, aggregated from the "center data" sheet (salaries, rent, CM-1/CM-2)</div>
     </div>
-    <button class="chat-back-btn" id="closeChatBtn">← Back to Dashboard</button>
+    <button class="chat-back-btn" id="closePnlBtn">← Back to Dashboard</button>
   </div>
-  <div class="chat-fullpage-body" id="chatLog"></div>
-  <div class="chat-fullpage-footer">
-    <div class="chat-input-row">
-      <input type="text" id="chatInput" placeholder="e.g. Show only RJ state for FY-27, group by Center then Model, flag CM-1% below 5%">
-      <button id="chatSend">Send</button>
+  <div class="chat-fullpage-body">
+    <div class="panel">
+      <div class="pnl-viewtabs">
+        <button class="pnl-viewtab active" id="pnlTabMoM" type="button">Month vs Month</button>
+        <button class="pnl-viewtab" id="pnlTabState" type="button">By State</button>
+      </div>
+
+      <div id="pnlMoMView">
+        <div class="pnl-controls">
+          <div class="grp">
+            <label>Month A (group)</label>
+            <div class="filter-group pnl-monthpicker" id="pnlGroupABox">
+              <button type="button" class="filter-title" id="pnlGroupATitle">Jul '26</button>
+              <div class="filter-options"><div class="checkbox-list" id="pnlGroupAList"></div></div>
+            </div>
+          </div>
+          <span class="pnl-vs">vs</span>
+          <div class="grp">
+            <label>Month B (group)</label>
+            <div class="filter-group pnl-monthpicker" id="pnlGroupBBox">
+              <button type="button" class="filter-title" id="pnlGroupBTitle">Jun '26</button>
+              <div class="filter-options"><div class="checkbox-list" id="pnlGroupBList"></div></div>
+            </div>
+          </div>
+          <button class="pnl-swap" id="pnlSwapBtn" type="button">⇄ Swap</button>
+          <span class="pnl-heatmap-hint">Tick 2+ months in a group to compare quarters or any custom span</span>
+        </div>
+        <div class="pnl-banner" id="pnlBanner" hidden></div>
+        <div class="kpi-bar pnl-kpi-bar" id="pnlKpiBar"></div>
+        <div class="pnl-trend-grid" id="pnlTrendGrid"></div>
+        <div class="table-wrap">
+          <table class="datatable pnl-table" id="pnlTable">
+            <thead><tr>
+              <th class="lbl">Metric</th>
+              <th id="pnlThA">Month A</th>
+              <th id="pnlThB">Month B</th>
+              <th>Variance</th>
+              <th class="lbl">Remarks</th>
+            </tr></thead>
+            <tbody id="pnlTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="pnlStateView" hidden>
+        <div class="pnl-controls">
+          <div class="grp"><label for="pnlStateSel">Month</label><select class="pnl-select" id="pnlStateSel"></select></div>
+          <span class="pnl-heatmap-hint">Shaded cells: red = weakest state this month, green = strongest — rescales for whichever month is selected</span>
+        </div>
+        <div class="pnl-banner" id="pnlStateBanner" hidden></div>
+        <div class="pnl-insights" id="pnlStateInsights"></div>
+        <div class="table-wrap">
+          <table class="datatable pnl-table pnl-state-table" id="pnlStateTable">
+            <thead><tr id="pnlStateHeadRow"><th class="lbl">Metric</th></tr></thead>
+            <tbody id="pnlStateTbody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <div class="chat-hint">Try: "filter to MH and GJ" · "group by state then center" · "highlight GM% below 10" · "hide charts" · "reset filters"</div>
   </div>
 </div>
 
@@ -436,10 +551,11 @@ const FIELD_LABELS = {
 };
 
 const FILTER_KEYS = ['st','fy','nsm','mg','tmg','vt','ag','gst','src','ty'];
+const OPEN_FILTERS = new Set();
 
 let CONFIG = {
   filters: { st:[], fy:['FY-27'], mg:[], tmg:[], vt:[], ag:[], nsm:[], gst:[], src:[], ty:[] },
-  table1: { groupBy:['md','ct'], sortBy:'ts', sortDir:'desc', topN:0 },
+  table1: { groupBy:['md','st','ct'], sortBy:'ts', sortDir:'desc', topN:0 },
   highlight: { field:'cm1Pct', threshold:0, negativeColor:'#fde8e8', op:'lt' },
   view: { showTable1:true, showTable2:true, showAgeing:true, showCharts:true, showProcurement:true }
 };
@@ -959,7 +1075,7 @@ function renderKPIs(rows){
   }).join('');
 }
 
-/* ---------- filter chips ---------- */
+/* ---------- filters ---------- */
 function renderFilters(){
   const container = document.getElementById('filterBar');
   container.innerHTML = '';
@@ -967,29 +1083,29 @@ function renderFilters(){
     let values = META[key] || [];
     if(ORDER[key]) values = ORDER[key].filter(v=>values.includes(v));
     const box = document.createElement('div');
-    box.className = 'filter-group';
+    box.className = `filter-group${OPEN_FILTERS.has(key)?' open':''}`;
     const activeCount = CONFIG.filters[key].length;
-    if(key==='nsm'){
-      box.innerHTML = `<div class="filter-title">${FIELD_LABELS[key]} ${activeCount? `<span class="badge">${activeCount}</span>`:''}</div>
-        <select class="month-select" multiple size="1" aria-label="${FIELD_LABELS[key]}">
-          ${values.map(v=>`<option value="${v}" ${CONFIG.filters[key].includes(v)?'selected':''}>${v}</option>`).join('')}
-        </select>`;
-      container.appendChild(box);
-      box.querySelector('select').addEventListener('change', e=>{
-        CONFIG.filters.nsm = Array.from(e.target.selectedOptions).map(option=>option.value);
-        renderAll();
-      });
-      return;
-    }
-    box.innerHTML = `<div class="filter-title">${FIELD_LABELS[key]||key} ${activeCount? `<span class="badge">${activeCount}</span>`:''}</div>
-      <div class="chip-row" data-key="${key}">
-        ${values.map(v=>`<button class="chip ${CONFIG.filters[key].includes(v)?'active':''}" data-key="${key}" data-val="${v}">${v}</button>`).join('')}
-      </div>`;
+    const title = document.createElement('button');
+    title.type = 'button';
+    title.className = 'filter-title';
+    title.innerHTML = `${FIELD_LABELS[key]} ${activeCount? `<span class="badge">${activeCount}</span>`:''}`;
+    title.addEventListener('click', ()=>{
+      if(OPEN_FILTERS.has(key)) OPEN_FILTERS.delete(key); else OPEN_FILTERS.add(key);
+      box.classList.toggle('open', OPEN_FILTERS.has(key));
+    });
+    box.appendChild(title);
+
+    const options = document.createElement('div');
+    options.className = 'filter-options';
+    options.innerHTML = `<div class="checkbox-list" data-key="${key}">
+      ${values.map((v, index)=>`<label class="checkbox-option"><input type="checkbox" data-key="${key}" data-val="${v}" id="filter-${key}-${index}" ${CONFIG.filters[key].includes(v)?'checked':''}><span>${v}</span></label>`).join('')}
+    </div>`;
+    box.appendChild(options);
     container.appendChild(box);
   });
-  container.querySelectorAll('.chip').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const k = btn.dataset.key, v = btn.dataset.val;
+  container.querySelectorAll('input[type="checkbox"]').forEach(input=>{
+    input.addEventListener('change', ()=>{
+      const k = input.dataset.key, v = input.dataset.val;
       const arr = CONFIG.filters[k];
       const i = arr.indexOf(v);
       if(i>-1) arr.splice(i,1); else arr.push(v);
@@ -1003,50 +1119,56 @@ function clearFilters(){
   renderAll();
 }
 
-/* ---------- Table 1: grouped model/center table ---------- */
+/* ---------- Table 1: grouped model/state/center table (N-level drill-down) ---------- */
 function renderTable1(rows){
   const wrap = document.getElementById('table1Wrap');
   if(!CONFIG.view.showTable1){ wrap.innerHTML=''; return; }
-  const [lvl1, lvl2] = CONFIG.table1.groupBy;
-  const g1 = groupRows(rows, lvl1);
-
-  let entries = Array.from(g1.entries()).map(([k,rs])=>[k, rs, metricsFor(rs)]);
+  const levels = CONFIG.table1.groupBy.filter(Boolean);
   const sb = CONFIG.table1.sortBy;
-  entries.sort((a,b)=> CONFIG.table1.sortDir==='desc' ? (b[2][sb]-a[2][sb]) : (a[2][sb]-b[2][sb]));
-  if(CONFIG.table1.topN>0) entries = entries.slice(0, CONFIG.table1.topN);
+  const sortDir = CONFIG.table1.sortDir;
+  const topN = CONFIG.table1.topN;
+  const rowClassByDepth = ['grp1-row','grp2-row','grp3-row'];
+  const labelClassByDepth = ['lbl','lbl sub','lbl sub2'];
 
-  let html = `<table class="datatable"><thead><tr>
-    <th class="lbl">${FIELD_LABELS[lvl1]||lvl1}${lvl2?' / '+(FIELD_LABELS[lvl2]||lvl2):''}</th>
-    <th>Qty</th><th>Total Sale</th><th>TM%</th><th>GM%</th><th>GM-A%</th><th>CM-1%</th>
-  </tr></thead><tbody>`;
-
-  for(const [k1, rs1, m1] of entries){
-    const expandKey = 'L1_'+k1;
-    const isOpen = EXPANDED.has(expandKey);
-    html += `<tr class="grp1-row" data-toggle="${expandKey}">
-      <td class="lbl"><span class="caret">${isOpen?'▾':'▸'}</span><b>${k1}</b></td>
-      <td>${fmtNum(m1.qty)}</td><td>${fmtLakh(m1.ts)}</td>
-      <td class="metric-pct ${cellClass('tmPct',m1.tmPct)}">${fmtPct(m1.tmPct)}</td>
-      <td class="metric-pct ${cellClass('gmPct',m1.gmPct)}">${fmtPct(m1.gmPct)}</td>
-      <td class="${cellClass('gmaPct',m1.gmaPct)}">${fmtPct(m1.gmaPct)}</td>
-      <td class="metric-pct ${cellClass('cm1Pct',m1.cm1Pct)}">${fmtPct(m1.cm1Pct)}</td>
+  function metricRow(k, m, depth, expandKey, isLeaf){
+    const isOpen = !isLeaf && EXPANDED.has(expandKey);
+    const caret = isLeaf ? '' : `<span class="caret">${isOpen?'▾':'▸'}</span>`;
+    const label = depth===0 ? `<b>${k}</b>` : k;
+    const rowCls = rowClassByDepth[Math.min(depth, rowClassByDepth.length-1)];
+    return `<tr class="${rowCls}"${isLeaf?'':` data-toggle="${expandKey}"`}>
+      <td class="${labelClassByDepth[Math.min(depth, labelClassByDepth.length-1)]}">${caret}${label}</td>
+      <td>${fmtNum(m.qty)}</td><td>${fmtLakh(m.ts)}</td>
+      <td class="metric-pct ${cellClass('tmPct',m.tmPct)}">${fmtPct(m.tmPct)}</td>
+      <td class="metric-pct ${cellClass('gmPct',m.gmPct)}">${fmtPct(m.gmPct)}</td>
+      <td class="${cellClass('gmaPct',m.gmaPct)}">${fmtPct(m.gmaPct)}</td>
+      <td class="metric-pct ${cellClass('cm1Pct',m.cm1Pct)}">${fmtPct(m.cm1Pct)}</td>
     </tr>`;
-    if(isOpen && lvl2){
-      const g2 = groupRows(rs1, lvl2);
-      const sub = Array.from(g2.entries()).map(([k,rs])=>[k,rs,metricsFor(rs)]);
-      sub.sort((a,b)=>b[2].ts-a[2].ts);
-      for(const [k2, rs2, m2] of sub){
-        html += `<tr class="grp2-row">
-          <td class="lbl sub">${k2}</td>
-          <td>${fmtNum(m2.qty)}</td><td>${fmtLakh(m2.ts)}</td>
-          <td class="metric-pct ${cellClass('tmPct',m2.tmPct)}">${fmtPct(m2.tmPct)}</td>
-          <td class="metric-pct ${cellClass('gmPct',m2.gmPct)}">${fmtPct(m2.gmPct)}</td>
-          <td class="${cellClass('gmaPct',m2.gmaPct)}">${fmtPct(m2.gmaPct)}</td>
-          <td class="metric-pct ${cellClass('cm1Pct',m2.cm1Pct)}">${fmtPct(m2.cm1Pct)}</td>
-        </tr>`;
+  }
+
+  function renderLevel(rowsIn, depth, keyPrefix){
+    const field = levels[depth];
+    const g = groupRows(rowsIn, field);
+    let entries = Array.from(g.entries()).map(([k,rs])=>[k, rs, metricsFor(rs)]);
+    entries.sort((a,b)=> sortDir==='desc' ? (b[2][sb]-a[2][sb]) : (a[2][sb]-b[2][sb]));
+    if(depth===0 && topN>0) entries = entries.slice(0, topN);
+    const isLeaf = depth === levels.length-1;
+    let out = '';
+    for(const [k, rs, m] of entries){
+      const expandKey = keyPrefix+'/'+k;
+      out += metricRow(k, m, depth, expandKey, isLeaf);
+      if(!isLeaf && EXPANDED.has(expandKey)){
+        out += renderLevel(rs, depth+1, expandKey);
       }
     }
+    return out;
   }
+
+  const headerLabel = levels.map(f=>FIELD_LABELS[f]||f).join(' / ');
+  let html = `<table class="datatable"><thead><tr>
+    <th class="lbl">${headerLabel}</th>
+    <th>Qty</th><th>Total Sale</th><th>TM%</th><th>GM%</th><th>GM-A%</th><th>CM-1%</th>
+  </tr></thead><tbody>`;
+  html += renderLevel(rows, 0, 'L');
   const total = metricsFor(rows);
   html += `<tr class="total-row">
     <td class="lbl">TOTAL</td>
@@ -1444,17 +1566,55 @@ function renderCharts(rows){
 
   // ---- source mix donut ----
   const bySrc = groupRows(rows, 'src');
-  const sourceEntries = Array.from(bySrc.entries());
+  const orderedSources = ['Auction', 'Dir/Dealer', 'Exchange/farm'];
+  const sourceEntries = orderedSources.map(source => [source, bySrc.get(source) || []]);
   const sourceTotal = rows.length;
+  const sourceColors = [CHART_COLORS.navy, CHART_COLORS.teal, CHART_COLORS.amber];
   destroyChart('chartSource');
   CHARTS.chartSource = new Chart(document.getElementById('chartSource'), {
     type:'doughnut',
-    data: { labels: sourceEntries.map(([source,rs])=>`${source} (${sourceTotal ? (rs.length/sourceTotal*100).toFixed(1) : '0.0'}%)`), datasets:[{
-      data: sourceEntries.map(([,rs])=>rs.length),
-      backgroundColor:[CHART_COLORS.navy, CHART_COLORS.teal, CHART_COLORS.amber, CHART_COLORS.grey]
-    }]},
-    options: { responsive:true, maintainAspectRatio:false }
+    data: {
+      labels: sourceEntries.map(([source]) => source),
+      datasets:[{
+        data: sourceEntries.map(([,rs]) => rs.length),
+        backgroundColor: sourceColors,
+        borderColor:'#ffffff',
+        borderWidth:2,
+        hoverOffset:10
+      }]
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio:false,
+      cutout:'34%',
+      layout:{ padding:{ top:6, right:10, bottom:0, left:0 } },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{
+          callbacks:{
+            label:(ctx)=>`${ctx.label}: ${ctx.parsed} (${sourceTotal ? ((ctx.parsed/sourceTotal)*100).toFixed(1) : '0.0'}%)`
+          }
+        }
+      }
+    }
   });
+
+  const legendEl = document.getElementById('chartSourceLegend');
+  if (legendEl) {
+    legendEl.innerHTML = sourceEntries.map(([source, rs], index) => {
+      const count = rs.length;
+      const pct = sourceTotal ? ((count / sourceTotal) * 100) : 0;
+      return `
+        <div class="source-mix-item">
+          <span class="source-swatch" style="background:${sourceColors[index]}"></span>
+          <div class="source-mix-meta">
+            <strong>${source}</strong>
+            <span>No. ${count} · ${pct.toFixed(1)}%</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 }
 
 /* ---------- master render ---------- */
@@ -1499,7 +1659,7 @@ CONFIG SCHEMA you must return (include ONLY the top-level keys you want to chang
   "summary": "one short sentence describing what you changed, for the user to read",
   "filters": { "<one or more of st,fy,mg,tmg,vt,ag,nsm,gst,src,ty>": ["value1","value2"] },
   "resetFilters": true,
-  "table1": { "groupBy": ["<field>","<field or null>"], "sortBy": "ts|qty|tmPct|gmPct|cm1Pct|gmaPct", "sortDir": "asc|desc", "topN": 0 },
+  "table1": { "groupBy": ["<field>","<field or null>","<field or null>"], "sortBy": "ts|qty|tmPct|gmPct|cm1Pct|gmaPct", "sortDir": "asc|desc", "topN": 0 },
   "highlight": { "field": "tmPct|gmPct|gmaPct|cm1Pct", "threshold": 0, "op": "lt|gt" },
   "view": { "showTable1": true, "showTable2": true, "showAgeing": true, "showCharts": true, "showProcurement": true }
 }
@@ -1507,7 +1667,7 @@ CONFIG SCHEMA you must return (include ONLY the top-level keys you want to chang
 Rules:
 - "filters" replaces ONLY the listed keys; keys not mentioned keep their current values. Use exact values from the lists above (case-sensitive).
 - If the user asks to clear/reset filters, set "resetFilters": true and omit "filters".
-- table1.groupBy controls the main pivot table's row grouping (level 1 = outer group, level 2 = expandable sub-group). Common groupings: ["md","ct"] (model then center), ["ct","md"] (center then model), ["st","ct"], ["mk","md"], ["nsm",null].
+- table1.groupBy controls the main pivot table's row grouping and drill-down depth (2 or 3 fields, each level expandable via its own caret, the last field is the innermost/leaf level). Default: ["md","st","ct"] (model, then state, then center). Other groupings: ["md","ct"] (model then center, 2 levels), ["ct","md"] (center then model), ["st","ct"], ["mk","md"], ["nsm",null].
 - highlight.field/threshold/op controls which metric gets red-flagged in tables (e.g. CM-1% below 0).
 - If the user asks something you cannot map to this schema, still return valid JSON with "summary" explaining briefly what you understood and did your best guess, and don't break the schema.
 - Always return valid parseable JSON and nothing else.`;
@@ -1703,7 +1863,6 @@ function renderInsights(result){
 }
 
 document.getElementById('insightsBtn').addEventListener('click', generateInsights);
-document.getElementById('chatSend').addEventListener('click', sendChat);
 document.getElementById('excelUploadInput').addEventListener('change', (e)=>{
   const file = e.target.files[0];
   if(file) handleFileUpload(file);
@@ -1715,14 +1874,7 @@ loadCloudData(false);
 setInterval(()=> loadCloudData(false), CLOUD_REFRESH_MS);
 initApiKey();
 renderSessionCost();
-document.getElementById('chatInput').addEventListener('keydown', (e)=>{
-  if(e.key==='Enter'){ sendChat(); }
-});
 document.getElementById('clearFiltersBtn').addEventListener('click', clearFilters);
-document.getElementById('openChatBtn').addEventListener('click', ()=>{
-  document.getElementById('chatFullpage').classList.add('open');
-  document.getElementById('chatInput').focus();
-});
 document.getElementById('openTable1Btn').addEventListener('click', ()=>{
   document.getElementById('table1Fullpage').classList.add('open');
 });
@@ -1735,12 +1887,769 @@ document.getElementById('openInsightsBtn').addEventListener('click', ()=>{
 document.getElementById('closeInsightsBtn').addEventListener('click', ()=>{
   document.getElementById('insightsFullpage').classList.remove('open');
 });
-document.getElementById('closeChatBtn').addEventListener('click', ()=>{
-  document.getElementById('chatFullpage').classList.remove('open');
-});
-
 renderAll();
 
 </script>
+<script>
+/* ===================== Company P&L (center data sheet) ===================== */
+const PNL_DATA = {"2025-04":{"centres":64,"deliveries":195,"tractor_sale":841.2937,"other_rev":10.807,"cancel_rev":2.133,"finance_inc":14.1156,"total_rev":868.3493,"cogs":731.287,"yard":9.9377,"logistics":5.7553,"docs":1.1341,"rto":26.0685,"refurb":27.691,"insurance":13.1763,"broker":0.51,"sales_incentive":0.714,"retail_sal":0.7485,"proc_sal":0.7255,"ops_sal":1.4216,"drivers_sal":2.6243,"others_hk":3.0006,"sales_sal":19.8403,"rental":16.5224,"zero_salary_centres":2},
+"2025-05":{"centres":64,"deliveries":245,"tractor_sale":1015.098,"other_rev":10.85,"cancel_rev":2.118,"finance_inc":17.7218,"total_rev":1045.7878,"cogs":903.8215,"yard":10.5296,"logistics":6.6554,"docs":1.3819,"rto":33.5941,"refurb":25.0276,"insurance":17.2065,"broker":0.5351,"sales_incentive":1.0335,"retail_sal":1.112,"proc_sal":0.7255,"ops_sal":1.8492,"drivers_sal":2.4891,"others_hk":2.7886,"sales_sal":20.4592,"rental":16.4179,"zero_salary_centres":2},
+"2025-06":{"centres":64,"deliveries":241,"tractor_sale":942.5496,"other_rev":8.9218,"cancel_rev":1.704,"finance_inc":17.6753,"total_rev":970.8507,"cogs":848.0642,"yard":10.0491,"logistics":6.8815,"docs":1.3054,"rto":31.9605,"refurb":21.65,"insurance":14.0647,"broker":0.299,"sales_incentive":1.2562,"retail_sal":0.9415,"proc_sal":0.815,"ops_sal":2.1419,"drivers_sal":2.3197,"others_hk":3.4058,"sales_sal":20.9108,"rental":16.4369,"zero_salary_centres":2},
+"2025-07":{"centres":68,"deliveries":165,"tractor_sale":679.248,"other_rev":6.3486,"cancel_rev":1.6211,"finance_inc":13.7252,"total_rev":700.9429,"cogs":615.8636,"yard":7.2728,"logistics":4.6284,"docs":0.9401,"rto":23.0225,"refurb":18.1313,"insurance":9.9222,"broker":0.36,"sales_incentive":1.0966,"retail_sal":0.836,"proc_sal":0.8235,"ops_sal":1.8658,"drivers_sal":2.2415,"others_hk":3.0878,"sales_sal":19.7311,"rental":16.5156,"zero_salary_centres":7},
+"2025-08":{"centres":69,"deliveries":224,"tractor_sale":868.6449,"other_rev":9.228,"cancel_rev":1.402,"finance_inc":16.3252,"total_rev":895.6001,"cogs":780.715,"yard":9.7475,"logistics":7.2473,"docs":1.1991,"rto":24.941,"refurb":18.8444,"insurance":12.6057,"broker":0.7053,"sales_incentive":1.0998,"retail_sal":0.836,"proc_sal":0.8235,"ops_sal":1.9232,"drivers_sal":2.2594,"others_hk":3.1953,"sales_sal":21.7422,"rental":16.6885,"zero_salary_centres":6},
+"2025-09":{"centres":73,"deliveries":217,"tractor_sale":841.8955,"other_rev":9.38,"cancel_rev":2.035,"finance_inc":21.3104,"total_rev":874.6209,"cogs":752.5525,"yard":10.4138,"logistics":6.8624,"docs":1.216,"rto":28.5124,"refurb":21.4216,"insurance":10.2932,"broker":1.5293,"sales_incentive":1.1263,"retail_sal":0.8169,"proc_sal":0.8235,"ops_sal":1.9452,"drivers_sal":2.388,"others_hk":3.3831,"sales_sal":20.032,"rental":17.8334,"zero_salary_centres":8},
+"2025-10":{"centres":74,"deliveries":220,"tractor_sale":817.7853,"other_rev":11.16,"cancel_rev":0.892,"finance_inc":20.7554,"total_rev":850.5927,"cogs":739.7473,"yard":9.9225,"logistics":7.5108,"docs":1.1278,"rto":25.7645,"refurb":21.1503,"insurance":10.5065,"broker":0.8,"sales_incentive":1.09,"retail_sal":0.836,"proc_sal":0.7787,"ops_sal":1.9259,"drivers_sal":2.8442,"others_hk":3.8311,"sales_sal":20.2675,"rental":18.1808,"zero_salary_centres":8},
+"2025-11":{"centres":75,"deliveries":178,"tractor_sale":657.4814,"other_rev":10.392,"cancel_rev":1.323,"finance_inc":16.0319,"total_rev":685.2283,"cogs":594.071,"yard":8.4386,"logistics":6.9449,"docs":0.8769,"rto":22.7449,"refurb":18.3966,"insurance":9.4883,"broker":0.24,"sales_incentive":0.7,"retail_sal":0.8296,"proc_sal":0.6556,"ops_sal":1.9384,"drivers_sal":3.5993,"others_hk":3.4088,"sales_sal":20.9972,"rental":18.0669,"zero_salary_centres":12},
+"2025-12":{"centres":83,"deliveries":258,"tractor_sale":879.2609,"other_rev":11.3,"cancel_rev":1.27,"finance_inc":19.4075,"total_rev":911.2384,"cogs":793.9786,"yard":11.5093,"logistics":10.8783,"docs":1.214,"rto":23.7056,"refurb":25.3858,"insurance":11.2541,"broker":0.77,"sales_incentive":1.09,"retail_sal":0.8228,"proc_sal":0.8356,"ops_sal":2.0998,"drivers_sal":2.5542,"others_hk":3.4031,"sales_sal":19.4594,"rental":18.3799,"zero_salary_centres":13},
+"2026-01":{"centres":94,"deliveries":256,"tractor_sale":941.3127,"other_rev":11.217,"cancel_rev":1.58,"finance_inc":19.6999,"total_rev":973.8096,"cogs":851.0403,"yard":11.9337,"logistics":13.2274,"docs":1.3992,"rto":27.6332,"refurb":25.1015,"insurance":12.2079,"broker":0.73,"sales_incentive":1.09,"retail_sal":0.8296,"proc_sal":0.6556,"ops_sal":2.1045,"drivers_sal":2.3468,"others_hk":4.3605,"sales_sal":23.6184,"rental":20.6255,"zero_salary_centres":15},
+"2026-02":{"centres":96,"deliveries":250,"tractor_sale":936.1233,"other_rev":8.9,"cancel_rev":1.862,"finance_inc":18.5067,"total_rev":965.392,"cogs":853.8097,"yard":12.3354,"logistics":13.7155,"docs":1.334,"rto":27.5174,"refurb":29.6606,"insurance":13.0494,"broker":0.3,"sales_incentive":0.8625,"retail_sal":0.836,"proc_sal":0.6556,"ops_sal":2.1873,"drivers_sal":2.4043,"others_hk":4.8475,"sales_sal":27.6789,"rental":22.2224,"zero_salary_centres":13},
+"2026-03":{"centres":98,"deliveries":309,"tractor_sale":1123.5688,"other_rev":10.878,"cancel_rev":1.294,"finance_inc":22.7511,"total_rev":1158.4919,"cogs":1019.9915,"yard":14.5829,"logistics":13.0353,"docs":1.6385,"rto":31.2006,"refurb":31.1156,"insurance":13.8201,"broker":0.6,"sales_incentive":0.7519,"retail_sal":0.8219,"proc_sal":0.6759,"ops_sal":2.3452,"drivers_sal":2.8914,"others_hk":5.1918,"sales_sal":30.3088,"rental":23.2682,"zero_salary_centres":13},
+"2026-04":{"centres":87,"deliveries":326,"tractor_sale":1227.5657,"other_rev":17.925,"cancel_rev":1.46,"finance_inc":26.2221,"total_rev":1273.1728,"cogs":1125.1141,"yard":14.3701,"logistics":13.9472,"docs":1.8311,"rto":31.9982,"refurb":37.7571,"insurance":15.9885,"broker":1.1208,"sales_incentive":0.915,"retail_sal":0.861,"proc_sal":1.6356,"ops_sal":2.0739,"drivers_sal":3.487,"others_hk":5.008,"sales_sal":30.5959,"rental":22.7682,"zero_salary_centres":2},
+"2026-05":{"centres":91,"deliveries":357,"tractor_sale":1394.4736,"other_rev":15.48,"cancel_rev":1.373,"finance_inc":24.162,"total_rev":1435.4886,"cogs":1292.7629,"yard":14.6247,"logistics":15.5988,"docs":2.0543,"rto":32.9138,"refurb":40.0588,"insurance":15.2147,"broker":0.35,"sales_incentive":1.5,"retail_sal":0.836,"proc_sal":2.4184,"ops_sal":2.2,"drivers_sal":3.5187,"others_hk":4.4795,"sales_sal":31.2786,"rental":22.5499,"zero_salary_centres":4},
+"2026-06":{"centres":93,"deliveries":403,"tractor_sale":1586.0794,"other_rev":18.097,"cancel_rev":2.5648,"finance_inc":23.1967,"total_rev":1629.9379,"cogs":1457.4804,"yard":12.2318,"logistics":17.8182,"docs":1.8371,"rto":28.3802,"refurb":45.7563,"insurance":16.076,"broker":0.35,"sales_incentive":1.37,"retail_sal":0.8805,"proc_sal":4.4194,"ops_sal":2.7696,"drivers_sal":3.5092,"others_hk":5.2711,"sales_sal":36.7815,"rental":22.9421,"zero_salary_centres":1},
+"2026-07":{"centres":96,"deliveries":224,"tractor_sale":844.2618,"other_rev":10.12,"cancel_rev":1.173,"finance_inc":13.0899,"total_rev":868.6447,"cogs":783.1312,"yard":7.8004,"logistics":9.97,"docs":0.8636,"rto":17.7017,"refurb":22.6523,"insurance":7.3708,"broker":0.25,"sales_incentive":1.7592,"retail_sal":0.8428,"proc_sal":5.8054,"ops_sal":2.4632,"drivers_sal":3.8493,"others_hk":4.3252,"sales_sal":35.5377,"rental":24.9702,"zero_salary_centres":12},
+"2026-08":{"centres":97,"deliveries":191,"tractor_sale":758.0426,"other_rev":8.823,"cancel_rev":0.191,"finance_inc":14.4871,"total_rev":781.5437,"cogs":688.7604,"yard":5.3233,"logistics":10.6717,"docs":0.7237,"rto":17.6578,"refurb":12.5768,"insurance":10.7326,"broker":0.2,"sales_incentive":1.5,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":24.9702,"zero_salary_centres":97}};
+
+const PNL_MONTH_KEYS = Object.keys(PNL_DATA).sort();
+
+function pnlMonthLabel(key){
+  const parts = key.split('-'); const y = +parts[0], m = +parts[1];
+  const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return names[m-1] + " '" + String(y).slice(2);
+}
+function pnlMonthLabelShort(key){
+  const parts = key.split('-'); const y = +parts[0], m = +parts[1];
+  const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return names[m-1] + "'" + String(y).slice(2);
+}
+
+const PNL_RAW_KEYS = ['centres','deliveries','tractor_sale','other_rev','cancel_rev','finance_inc','total_rev','cogs',
+  'yard','logistics','docs','rto','refurb','insurance','broker','sales_incentive',
+  'retail_sal','proc_sal','ops_sal','drivers_sal','others_hk','sales_sal','rental','zero_salary_centres'];
+function pnlEmptyRaw(){ const o={}; PNL_RAW_KEYS.forEach(k=>o[k]=0); return o; }
+function pnlSumRaw(list){
+  const o = pnlEmptyRaw();
+  list.forEach(r=>{ if(!r) return; PNL_RAW_KEYS.forEach(k=>{ o[k]+= (r[k]||0); }); });
+  return o;
+}
+
+function pnlDerive(raw){
+  const tvc = raw.yard+raw.logistics+raw.docs+raw.rto+raw.refurb+raw.insurance+raw.broker+raw.sales_incentive;
+  const gross_margin = raw.total_rev - raw.cogs;
+  const trading_margin = raw.tractor_sale + raw.other_rev - raw.cogs;
+  const cm1 = gross_margin - tvc;
+  const salaries = raw.retail_sal+raw.proc_sal+raw.ops_sal+raw.drivers_sal+raw.others_hk+raw.sales_sal;
+  const fixed_cost = salaries + raw.rental;
+  const cm2 = cm1 - fixed_cost;
+  const d = raw.deliveries || 0;
+  return Object.assign({}, raw, {
+    tvc, gross_margin, trading_margin, cm1, salaries, fixed_cost, cm2,
+    asp: d ? raw.total_rev/d : 0,
+    gm_per_delivery: d ? gross_margin/d : 0,
+    cm1exp_per_delivery: d ? tvc/d : 0,
+    cm2exp_per_delivery: d ? fixed_cost/d : 0,
+    pnl_per_delivery: d ? cm2/d : 0
+  });
+}
+
+function pnlFmt(x, dec){ dec = dec===undefined?2:dec;
+  const neg = x < -0.0000001;
+  const v = Math.abs(x).toLocaleString('en-IN', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+  return neg ? '(' + v + ')' : v;
+}
+function pnlFmtPct(x, dec){ dec = dec===undefined?1:dec; return pnlFmt(x*100, dec) + '%'; }
+function pnlPctChange(a,b){ return b ? (a-b)/Math.abs(b) : (a ? 1 : 0); }
+
+/* ---- Month A / Month B are now GROUPS of one or more months (checkbox pickers),
+   so a quarter (or any custom span) can be compared against another. ---- */
+let pnlGroupA = new Set([PNL_MONTH_KEYS.includes('2026-07') ? '2026-07' : PNL_MONTH_KEYS[PNL_MONTH_KEYS.length-1]]);
+let pnlGroupB = new Set([PNL_MONTH_KEYS.includes('2026-06') ? '2026-06' : PNL_MONTH_KEYS[PNL_MONTH_KEYS.length-2]]);
+let pnlExpanded = {revenue:true, varcost:true, salaries:true};
+let pnlRevA = 0, pnlRevB = 0;
+
+function pnlSortedGroup(set){ return PNL_MONTH_KEYS.filter(k=>set.has(k)); }
+function pnlGroupLabel(set){
+  const keys = pnlSortedGroup(set);
+  if(keys.length===0) return '(none)';
+  if(keys.length===1) return pnlMonthLabel(keys[0]);
+  if(keys.length<=3) return keys.map(pnlMonthLabel).join(' + ');
+  return pnlMonthLabel(keys[0])+' … '+pnlMonthLabel(keys[keys.length-1]);
+}
+
+function pnlBuildMonthChecklist(containerId, groupSet, onChange){
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  const keysDesc = PNL_MONTH_KEYS.slice().reverse();
+  keysDesc.forEach(k=>{
+    const flag = PNL_DATA[k].zero_salary_centres === PNL_DATA[k].centres ? '  ⚠' : '';
+    const label = document.createElement('label');
+    label.className = 'checkbox-option';
+    label.innerHTML = '<input type="checkbox" value="'+k+'"'+(groupSet.has(k)?' checked':'')+'><span>'+pnlMonthLabel(k)+flag+'</span>';
+    el.appendChild(label);
+  });
+  el.querySelectorAll('input[type="checkbox"]').forEach(inp=>{
+    inp.addEventListener('change', ()=>{
+      const k = inp.value;
+      if(inp.checked){ groupSet.add(k); }
+      else {
+        if(groupSet.size<=1){ inp.checked = true; return; }
+        groupSet.delete(k);
+      }
+      onChange();
+    });
+  });
+}
+function pnlUpdateGroupTitle(titleId, groupSet){
+  const el = document.getElementById(titleId);
+  const n = groupSet.size;
+  el.innerHTML = pnlGroupLabel(groupSet) + (n>1 ? ' <span class="badge">'+n+'</span>' : '');
+}
+function pnlRefreshGroupUI(){
+  pnlBuildMonthChecklist('pnlGroupAList', pnlGroupA, ()=>{ pnlUpdateGroupTitle('pnlGroupATitle', pnlGroupA); pnlRender(); });
+  pnlBuildMonthChecklist('pnlGroupBList', pnlGroupB, ()=>{ pnlUpdateGroupTitle('pnlGroupBTitle', pnlGroupB); pnlRender(); });
+  pnlUpdateGroupTitle('pnlGroupATitle', pnlGroupA);
+  pnlUpdateGroupTitle('pnlGroupBTitle', pnlGroupB);
+}
+
+(function pnlInitGroups(){
+  pnlRefreshGroupUI();
+  ['pnlGroupABox','pnlGroupBBox'].forEach(boxId=>{
+    const box = document.getElementById(boxId);
+    const title = box.querySelector('.filter-title');
+    title.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const willOpen = !box.classList.contains('open');
+      ['pnlGroupABox','pnlGroupBBox'].forEach(id=>document.getElementById(id).classList.remove('open'));
+      box.classList.toggle('open', willOpen);
+    });
+  });
+  document.addEventListener('click', (e)=>{
+    ['pnlGroupABox','pnlGroupBBox'].forEach(id=>{
+      const box = document.getElementById(id);
+      if(box && box.classList.contains('open') && !box.contains(e.target)) box.classList.remove('open');
+    });
+  });
+  document.getElementById('pnlSwapBtn').addEventListener('click', ()=>{
+    const t = pnlGroupA; pnlGroupA = pnlGroupB; pnlGroupB = t;
+    pnlRefreshGroupUI();
+    pnlRender();
+  });
+})();
+
+const PNL_KPIS = [
+  {label:'Live Centres', get:m=>m.centres, dec:0},
+  {label:'Deliveries', get:m=>m.deliveries, dec:0},
+  {label:'ASP / Delivery (₹L)', get:m=>m.asp, dec:2},
+  {label:'Total Revenue (₹L)', get:m=>m.total_rev, dec:2},
+  {label:'Gross Margin %', get:m=>m.total_rev? m.gross_margin/m.total_rev:0, dec:1, isPct:true},
+  {label:'CM-2 Margin (₹L)', get:m=>m.cm2, dec:2, flagNeg:true},
+];
+
+function pnlRenderKpis(a,b){
+  const bar = document.getElementById('pnlKpiBar');
+  bar.innerHTML = '';
+  PNL_KPIS.forEach(k=>{
+    const va = k.get(a), vb = k.get(b);
+    const diff = va - vb;
+    const pct = pnlPctChange(va,vb);
+    const flat = Math.abs(pct) < 0.005;
+    const color = flat ? 'var(--muted)' : (diff>=0 ? 'var(--green)' : 'var(--red)');
+    const arrow = flat ? '→' : (diff>=0 ? '↑' : '↓');
+    const valStr = k.isPct ? pnlFmtPct(va,k.dec) : pnlFmt(va,k.dec);
+    const isNegKpi = k.flagNeg && va < 0;
+    const div = document.createElement('div');
+    div.className = 'kpi' + (isNegKpi ? ' neg' : '');
+    div.innerHTML =
+      '<div class="kpi-label">'+k.label+'</div>'+
+      '<div class="kpi-val">'+valStr+'</div>'+
+      '<div class="kpi-amount" style="color:'+color+';font-weight:700;">'+arrow+' '+pnlFmtPct(Math.abs(pct),1)+' vs Month B</div>';
+    bar.appendChild(div);
+  });
+}
+
+const PNL_TRENDS = [
+  {key:'deliveries', title:'Deliveries', unit:'units', type:'magnitude', get:m=>m.deliveries},
+  {key:'total_rev', title:'Total Revenue', unit:'₹ Lakh', type:'magnitude', get:m=>m.total_rev},
+  {key:'cm2', title:'CM-2 Margin', unit:'₹ Lakh', type:'diverging', get:m=>m.cm2},
+];
+
+function pnlRenderTrends(keysA, keysB){
+  const wrap = document.getElementById('pnlTrendGrid');
+  wrap.innerHTML = '';
+  const series = PNL_MONTH_KEYS.map(k=>pnlDerive(PNL_DATA[k]));
+  const n = series.length;
+  const W = 300, H = 132, PAD_L = 10, PAD_R = 10, PAD_T = 10, PAD_B = 26;
+  const setA = new Set(keysA), setB = new Set(keysB);
+  const labelStep = Math.max(1, Math.ceil(n/6));
+
+  PNL_TRENDS.forEach(cfg=>{
+    const vals = series.map(cfg.get);
+    const max0 = Math.max(...vals);
+    const min = cfg.type==='diverging' ? Math.min(...vals,0) : 0;
+    const max = Math.max(max0, 0);
+    const range = (max-min) || 1;
+    const plotH = H-PAD_T-PAD_B;
+    const x = i => PAD_L + i*(W-PAD_L-PAD_R)/(n-1);
+    const y = v => (H-PAD_B) - ( (v-min)/range ) * plotH;
+    const zeroY = y(0);
+
+    let path = vals.map((v,i)=> (i===0?'M':'L') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)).join(' ');
+    let areaPath = path + ' L ' + x(n-1).toFixed(1) + ' ' + zeroY.toFixed(1) +
+                   ' L ' + x(0).toFixed(1) + ' ' + zeroY.toFixed(1) + ' Z';
+
+    let svg = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" style="width:100%;display:block;aspect-ratio:'+W+'/'+H+';overflow:visible;">';
+    if(cfg.type==='diverging'){
+      svg += '<line x1="'+PAD_L+'" y1="'+zeroY.toFixed(1)+'" x2="'+(W-PAD_R)+'" y2="'+zeroY.toFixed(1)+'" stroke="var(--border)" stroke-width="1" stroke-dasharray="3 3"/>';
+    }
+    svg += '<path d="'+areaPath+'" fill="var(--teal-lt)" stroke="none"/>';
+    svg += '<path d="'+path+'" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>';
+
+    vals.forEach((v,i)=>{
+      const key = PNL_MONTH_KEYS[i];
+      const cx=x(i).toFixed(1), cy=y(v).toFixed(1);
+      if(setA.has(key)){
+        svg += '<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="var(--navy)" stroke="#fff" stroke-width="1.5" data-i="'+i+'" class="pnl-pt"/>';
+      } else if(setB.has(key)){
+        svg += '<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="#fff" stroke="var(--teal)" stroke-width="2" data-i="'+i+'" class="pnl-pt"/>';
+      } else {
+        svg += '<circle cx="'+cx+'" cy="'+cy+'" r="7" fill="transparent" data-i="'+i+'" class="pnl-pt"/>';
+      }
+    });
+
+    for(let i=0;i<n;i++){
+      const isStep = i%labelStep===0 && (n-1-i)>=labelStep;
+      if(isStep || i===n-1){
+        const anchor = i===0 ? 'start' : (i===n-1 ? 'end' : 'middle');
+        svg += '<text x="'+x(i).toFixed(1)+'" y="'+(H-8)+'" font-size="8.5" fill="var(--muted)" text-anchor="'+anchor+'" font-family="Segoe UI, sans-serif">'+pnlMonthLabelShort(PNL_MONTH_KEYS[i])+'</text>';
+      }
+    }
+    svg += '</svg>';
+
+    const card = document.createElement('div');
+    card.className = 'pnl-trend-card';
+    card.innerHTML =
+      '<div class="th"><span>'+cfg.title+'</span><span class="u">'+cfg.unit+'</span></div>'+
+      '<div style="position:relative;">'+svg+'<div class="pnl-tt" id="pnlTt-'+cfg.key+'"></div></div>'+
+      '<div class="pnl-trend-legend"><span><i style="background:var(--navy)"></i>Month A</span><span><i style="background:#fff;border:2px solid var(--teal);"></i>Month B</span></div>';
+    wrap.appendChild(card);
+
+    const tt = card.querySelector('#pnlTt-'+cfg.key);
+    card.querySelectorAll('.pnl-pt').forEach(pt=>{
+      pt.addEventListener('mouseenter', ()=>{
+        const i = +pt.getAttribute('data-i');
+        const v = vals[i];
+        tt.textContent = pnlMonthLabel(PNL_MONTH_KEYS[i]) + ': ' + (cfg.unit.indexOf('Lakh')>=0 ? '₹'+pnlFmt(v,2)+'L' : pnlFmt(v,0));
+        const rect = pt.getBoundingClientRect();
+        const parentRect = pt.closest('div').closest('div').getBoundingClientRect();
+        tt.style.left = (rect.left - parentRect.left + rect.width/2) + 'px';
+        tt.style.top = (rect.top - parentRect.top) + 'px';
+        tt.style.opacity = 1;
+      });
+      pt.addEventListener('mouseleave', ()=>{ tt.style.opacity = 0; });
+    });
+  });
+}
+
+function pnlBiggestVarLine(a,b,lines){
+  let best=null, bestAbs=-1;
+  lines.forEach(l=>{
+    const d = Math.abs(l.get(a)-l.get(b));
+    if(d>bestAbs){ bestAbs=d; best=l; }
+  });
+  return best;
+}
+
+function pnlBuildRows(a,b,labelA,labelB){
+  const rev_a = a.total_rev, rev_b = b.total_rev;
+  const varCostLines = [
+    {label:'- Yard Charges', get:m=>m.yard},
+    {label:'- Refurb Cost', get:m=>m.refurb},
+    {label:'- RTO Charges', get:m=>m.rto},
+    {label:'- Insurance Cost', get:m=>m.insurance},
+    {label:'Logistics Cost', get:m=>m.logistics, indent:true},
+    {label:'Documentation Charges', get:m=>m.docs, indent:true},
+    {label:'Broker Incentive', get:m=>m.broker, indent:true},
+    {label:'Sales incentive', get:m=>m.sales_incentive, indent:true},
+  ];
+  const bigVarLine = pnlBiggestVarLine(a,b,varCostLines);
+
+  const dPct = pnlPctChange(a.deliveries,b.deliveries);
+  const aspPct = pnlPctChange(a.asp,b.asp);
+  const revPct = pnlPctChange(a.total_rev,b.total_rev);
+  const cogsPct = pnlPctChange(a.cogs,b.cogs);
+
+  const rows = [];
+  const push = (r)=>rows.push(r);
+
+  push({type:'section', label:'Scale'});
+  push({label:'No. of centres', get:m=>m.centres, dec:0, bold:true,
+    remark:(a,b)=>{
+      const diff=a.centres-b.centres;
+      if(diff>0) return 'Network grew by '+diff+' centre'+(diff>1?'s':'')+' ('+b.centres+' → '+a.centres+').';
+      if(diff<0) return 'Centre count fell by '+Math.abs(diff)+' ('+b.centres+' → '+a.centres+') — confirm closures vs reporting gaps.';
+      return 'Centre count unchanged at '+a.centres+'.';
+    }});
+  push({label:'No. of deliveries sold', get:m=>m.deliveries, dec:0, bold:true,
+    remark:(a,b)=>{
+      const dir = dPct>=0?'up':'down';
+      let s = 'Deliveries '+dir+' '+pnlFmtPct(Math.abs(dPct),0)+' ('+(a.deliveries-b.deliveries>=0?'+':'')+(a.deliveries-b.deliveries)+' units) vs '+labelB+'.';
+      if(Math.abs(dPct)>0.15) s += ' Biggest single driver of the movement below.';
+      return s;
+    }});
+  push({label:'ASP (₹ Lakh / delivery)', get:m=>m.asp, dec:2, bold:true,
+    remark:(a,b)=>{
+      if(Math.abs(aspPct)<0.02) return 'Realisation per delivery was stable.';
+      return 'Realisation per delivery '+(aspPct>=0?'improved':'softened')+' '+pnlFmtPct(Math.abs(aspPct),1)+' — '+(aspPct>=0?'richer':'lower-value')+' deal mix in '+labelA+'.';
+    }});
+
+  push({type:'section', label:'Revenue', toggleGroup:'revenue'});
+  push({label:'- Tractor Sale value', get:m=>m.tractor_sale, pctOf:true, group:'revenue'});
+  push({label:'- Other Revenue', get:m=>m.other_rev, pctOf:true, group:'revenue'});
+  push({label:'- Cancel Revenue', get:m=>m.cancel_rev, pctOf:true, group:'revenue',
+    remark:(a,b)=>{
+      const p = pnlPctChange(a.cancel_rev,b.cancel_rev);
+      if(Math.abs(p)<0.25) return '';
+      return 'Cancellation revenue '+(p>=0?'rose':'fell')+' sharply ('+pnlFmtPct(Math.abs(p),0)+') in '+labelA+'.';
+    }});
+  push({label:'- Finance Income', get:m=>m.finance_inc, pctOf:true, group:'revenue'});
+  push({label:'Total Revenue', get:m=>m.total_rev, bold:true,
+    remark:(a,b)=>{
+      let driver = 'a mix of volume and realisation';
+      if(Math.abs(dPct) > Math.abs(aspPct)*1.5) driver = 'volume-led';
+      else if(Math.abs(aspPct) > Math.abs(dPct)*1.5) driver = 'price/mix-led';
+      return 'Revenue '+(revPct>=0?'up':'down')+' '+pnlFmtPct(Math.abs(revPct),0)+' vs '+labelB+' — '+driver+'.';
+    }});
+  push({label:'COGS', get:m=>m.cogs,
+    remark:(a,b)=>{
+      if(Math.abs(cogsPct-revPct)<0.03) return 'COGS moved in line with revenue — volume-led, not a change in per-unit buy cost.';
+      if(cogsPct>revPct) return 'COGS fell slower than revenue, compressing margin.';
+      return 'COGS fell faster than revenue, cushioning margin.';
+    }});
+  push({label:'Trading Margin', get:m=>m.trading_margin, pctOf:true, bold:true,
+    remark:(a,b)=>{
+      const pa = rev_a? a.trading_margin/rev_a:0, pb = rev_b? b.trading_margin/rev_b:0;
+      const pp = (pa-pb)*100;
+      return 'Trading margin '+(pp>=0?'expanded':'compressed')+' ~'+Math.abs(pp).toFixed(1)+'pp of revenue vs '+labelB+'.';
+    }});
+  push({label:'Gross Margin', get:m=>m.gross_margin, pctOf:true, bold:true,
+    remark:(a,b)=>{
+      const pa = rev_a? a.gross_margin/rev_a:0, pb = rev_b? b.gross_margin/rev_b:0;
+      const pp = (pa-pb)*100;
+      return 'Gross margin % '+(pp>=0?'up':'down')+' ~'+Math.abs(pp).toFixed(1)+'pp, a '+(Math.abs(pp)<1.5?'modest':'material')+' shift given the volume change.';
+    }});
+
+  push({type:'section', label:'Variable Costs (CM-1)', toggleGroup:'varcost'});
+  varCostLines.forEach(l=>{
+    push(Object.assign({}, l, {pctOf:!l.indent, indent:l.indent, group:'varcost',
+      remark: l===bigVarLine ? (a,b)=>{
+        const d = l.get(a)-l.get(b);
+        return l.label.replace(/^-\s*/,'')+' moved the most among variable costs this period (Δ ₹'+pnlFmt(Math.abs(d),2)+'L).';
+      } : undefined
+    }));
+  });
+  push({label:'Total Variable Charges', get:m=>m.tvc, pctOf:true, bold:true,
+    remark:(a,b)=>{
+      const pa = rev_a? a.tvc/rev_a:0, pb = rev_b? b.tvc/rev_b:0;
+      const pp=(pa-pb)*100;
+      return 'Variable cost scaled '+(a.tvc<=b.tvc?'down':'up')+' with volume, and '+(pp<=0?'improved slightly':'crept up slightly')+' as a share of revenue ('+pnlFmtPct(pb,1)+' → '+pnlFmtPct(pa,1)+').';
+    }});
+  push({label:'CM-1 Margin', get:m=>m.cm1, pctOf:true, bold:true,
+    remark:(a,b)=>{
+      const pa = rev_a? a.cm1/rev_a:0, pb = rev_b? b.cm1/rev_b:0;
+      const pp=(pa-pb)*100;
+      return 'CM-1 margin '+(pp>=0?'up':'down')+' ~'+Math.abs(pp).toFixed(1)+'pp of revenue vs '+labelB+'.';
+    }});
+
+  push({type:'section', label:'Fixed Costs (CM-2)'});
+  push({label:'Salaries', get:m=>m.salaries, pctOf:true, bold:true, toggleGroup:'salaries',
+    remark:(a,b)=>{
+      const salPct = pnlPctChange(a.salaries,b.salaries);
+      const pa = rev_a? a.salaries/rev_a:0, pb = rev_b? b.salaries/rev_b:0;
+      if(Math.abs(salPct)<0.05 && Math.abs(revPct)>0.15){
+        return 'Salary cost held almost flat while revenue moved '+pnlFmtPct(Math.abs(revPct),0)+' — operating '+(revPct<0?'deleverage':'leverage')+' as its revenue share moved '+pnlFmtPct(pb,1)+' → '+pnlFmtPct(pa,1)+'.';
+      }
+      return 'Salary cost share of revenue moved '+pnlFmtPct(pb,1)+' → '+pnlFmtPct(pa,1)+'.';
+    }});
+  push({label:'- Retail Salary', get:m=>m.retail_sal, indent:true, group:'salaries'});
+  push({label:'- Procurement Salaries', get:m=>m.proc_sal, indent:true, group:'salaries'});
+  push({label:'- Operations Salaries', get:m=>m.ops_sal, indent:true, group:'salaries'});
+  push({label:'- Drivers Salaries', get:m=>m.drivers_sal, indent:true, group:'salaries'});
+  push({label:'- Others (Housekeeping)', get:m=>m.others_hk, indent:true, group:'salaries'});
+  push({label:'- Sales Salaries', get:m=>m.sales_sal, pctOf:true, indent:true, group:'salaries'});
+  push({label:'Centre Rental cost', get:m=>m.rental, pctOf:true,
+    remark:(a,b)=>{
+      const perA = a.centres? a.rental/a.centres:0, perB = b.centres? b.rental/b.centres:0;
+      const p = pnlPctChange(perA,perB);
+      if(Math.abs(p)<0.08) return '';
+      return 'Rent per centre '+(p>=0?'rose':'fell')+' '+pnlFmtPct(Math.abs(p),0)+' — check new-centre lease terms.';
+    }});
+  push({label:'Total Fixed Cost', get:m=>m.fixed_cost, pctOf:true, bold:true,
+    remark:(a,b)=>{
+      const pa = rev_a? a.fixed_cost/rev_a:0, pb = rev_b? b.fixed_cost/rev_b:0;
+      const pp=(pa-pb)*100;
+      return 'Fixed cost share of revenue moved '+pnlFmtPct(pb,1)+' → '+pnlFmtPct(pa,1)+' ('+(pp>=0?'+':'')+pp.toFixed(1)+'pp) — '+(pp>1?'operating deleverage, not variable-cost overruns, is driving CM-2.':'fixed cost is scaling reasonably with revenue.');
+    }});
+  push({label:'CM-2 Margin', get:m=>m.cm2, pctOf:true, bold:true, flagNeg:true,
+    remark:(a,b)=>{
+      const dir = a.cm2>=b.cm2 ? 'improved' : 'widened / worsened';
+      return 'CM-2 '+dir+' from ₹'+pnlFmt(b.cm2,2)+'L to ₹'+pnlFmt(a.cm2,2)+'L vs '+labelB+'. Root cause: '+(Math.abs(dPct)>0.1?'volume ('+pnlFmtPct(Math.abs(dPct),0)+' '+(dPct>=0?'up':'down')+') against a near-fixed cost base.':'a shift in the underlying cost structure rather than volume.');
+    }});
+
+  push({type:'section', label:'Per-Delivery Economics'});
+  push({label:'GM / delivery', get:m=>m.gm_per_delivery, dec:2});
+  push({label:'CM-1 Exp / delivery', get:m=>m.cm1exp_per_delivery, dec:2});
+  push({label:'CM-2 Exp / delivery', get:m=>m.cm2exp_per_delivery, dec:2});
+  push({label:'Profit &amp; Loss / delivery', get:m=>m.pnl_per_delivery, dec:2,
+    remark:(a,b)=>{
+      const dir = a.pnl_per_delivery >= b.pnl_per_delivery ? 'improved' : 'deepened';
+      return 'Loss per delivery '+dir+' from ₹'+pnlFmt(b.pnl_per_delivery,2)+'L to ₹'+pnlFmt(a.pnl_per_delivery,2)+'L — confirms the swing is structural (cost per unit), not one-off.';
+    }});
+
+  return rows.filter(r=> !(r.group && !pnlExpanded[r.group]));
+}
+
+function pnlRenderTable(a,b,labelA,labelB){
+  document.getElementById('pnlThA').textContent = labelA;
+  document.getElementById('pnlThB').textContent = labelB;
+  const rows = pnlBuildRows(a,b,labelA,labelB);
+  const tbody = document.getElementById('pnlTbody');
+  tbody.innerHTML = '';
+
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    if(r.type==='section'){
+      tr.className = 'section-row';
+      if(r.toggleGroup) tr.dataset.toggle = r.toggleGroup;
+      const isOpen = r.toggleGroup ? pnlExpanded[r.toggleGroup] : true;
+      const td = document.createElement('td');
+      td.colSpan = 5;
+      td.innerHTML = r.toggleGroup ? '<span class="caret">'+(isOpen?'▾':'▸')+'</span>'+r.label+' <span style="font-weight:400;text-transform:none;letter-spacing:0;">('+(isOpen?'tap to collapse':'tap to expand')+')</span>' : r.label;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+    const va = r.get(a), vb = r.get(b);
+    const diff = va - vb;
+    const dec = r.dec===undefined?2:r.dec;
+
+    if(r.bold) tr.className += ' total-row';
+    if(r.indent) tr.className += ' indent';
+    tr.className = tr.className.trim();
+
+    const metricTd = document.createElement('td');
+    metricTd.className = 'lbl metric';
+    let labelHtml = r.label;
+    if(r.toggleGroup){
+      const isOpen = pnlExpanded[r.toggleGroup];
+      tr.dataset.toggle = r.toggleGroup;
+      labelHtml = '<span class="caret">'+(isOpen?'▾':'▸')+'</span>'+r.label;
+    }
+    metricTd.innerHTML = labelHtml;
+    tr.appendChild(metricTd);
+
+    [va,vb].forEach(v=>{
+      const td = document.createElement('td');
+      td.className = 'num';
+      let html = pnlFmt(v,dec);
+      if(r.flagNeg && v<0) td.classList.add('neg');
+      if(r.pctOf){
+        const rev = v===va ? pnlRevA : pnlRevB;
+        const pct = rev ? v/rev : 0;
+        html += '<span class="sub">'+pnlFmtPct(pct,1)+' of rev.</span>';
+      }
+      td.innerHTML = html;
+      tr.appendChild(td);
+    });
+
+    const varTd = document.createElement('td');
+    varTd.className = 'num';
+    const pct = pnlPctChange(va,vb);
+    const isCostLine = /Charge|Cost|Salar|Incentive|Rental|COGS/.test(r.label);
+    let varCls = '';
+    if(Math.abs(diff) > 0.0001){
+      if(isCostLine) varCls = diff<=0 ? 'state-best' : 'state-worst';
+      else varCls = diff>=0 ? 'state-best' : 'state-worst';
+    }
+    varTd.innerHTML = '<span class="'+varCls+'">'+pnlFmt(diff,dec)+'</span>' +
+      (Math.abs(vb)>0.0001 ? '<span class="sub">'+pnlFmtPct(Math.abs(pct),1)+'</span>' : '');
+    tr.appendChild(varTd);
+
+    const remarkTd = document.createElement('td');
+    remarkTd.className = 'lbl remark';
+    remarkTd.textContent = r.remark ? (r.remark(a,b) || '') : '';
+    tr.appendChild(remarkTd);
+
+    tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll('tr[data-toggle]').forEach(tr=>{
+    tr.addEventListener('click', ()=>{
+      const key = tr.dataset.toggle;
+      pnlExpanded[key] = !pnlExpanded[key];
+      pnlRender();
+    });
+  });
+}
+
+function pnlRender(){
+  const keysA = pnlSortedGroup(pnlGroupA);
+  const keysB = pnlSortedGroup(pnlGroupB);
+  const a = pnlDerive(pnlSumRaw(keysA.map(k=>PNL_DATA[k])));
+  const b = pnlDerive(pnlSumRaw(keysB.map(k=>PNL_DATA[k])));
+  /* centres is a headcount snapshot, not a flow — average it across a multi-month
+     group instead of summing, so "No. of centres" reads as network size, not centre-months. */
+  if(keysA.length) a.centres = Math.round(a.centres/keysA.length);
+  if(keysB.length) b.centres = Math.round(b.centres/keysB.length);
+  pnlRevA = a.total_rev; pnlRevB = b.total_rev;
+  const labelA = pnlGroupLabel(pnlGroupA), labelB = pnlGroupLabel(pnlGroupB);
+
+  pnlRenderKpis(a,b);
+  pnlRenderTrends(keysA, keysB);
+  pnlRenderTable(a,b,labelA,labelB);
+
+  const banner = document.getElementById('pnlBanner');
+  const flagged = keysA.concat(keysB).filter(k=>PNL_DATA[k].zero_salary_centres===PNL_DATA[k].centres).map(pnlMonthLabel);
+  const uniqueFlagged = Array.from(new Set(flagged));
+  if(uniqueFlagged.length){
+    banner.innerHTML = '⚠ <b>'+uniqueFlagged.join(', ')+'</b> show ₹0 salary cost across every centre — payroll looks unposted for that month. Fixed-cost and CM-2 figures involving it will be understated until "center data" is updated.';
+    banner.hidden = false;
+  } else {
+    banner.hidden = true;
+  }
+}
+
+document.getElementById('openPnlBtn').addEventListener('click', ()=>{
+  document.getElementById('companyPnlFullpage').classList.add('open');
+  pnlRender();
+});
+document.getElementById('closePnlBtn').addEventListener('click', ()=>{
+  document.getElementById('companyPnlFullpage').classList.remove('open');
+});
+</script>
+<script>
+/* ===================== Company P&L — By State ===================== */
+const STATE_ORDER = ['RJ','MP','MH','GJ','TL','CG'];
+/* pnlSumRaw / pnlEmptyRaw are defined in the Month-vs-Month block above and reused here. */
+
+const PNL_STATE_DATA = {"2025-04":{"GJ":{"centres":2,"deliveries":4,"tractor_sale":11.8709,"other_rev":0.0,"cancel_rev":0.075,"finance_inc":0.0,"total_rev":11.9459,"cogs":10.712,"yard":0.321,"logistics":0.1287,"docs":0.0287,"rto":0.4245,"refurb":0.2631,"insurance":0.1492,"broker":0.0,"sales_incentive":0.0146,"retail_sal":0.0154,"proc_sal":0.0149,"ops_sal":0.0292,"drivers_sal":0.12,"others_hk":0.0903,"sales_sal":0.3596,"rental":0.33,"zero_salary_centres":0},"MH":{"centres":11,"deliveries":27,"tractor_sale":150.1354,"other_rev":0.015,"cancel_rev":0.161,"finance_inc":2.1817,"total_rev":152.4931,"cogs":129.8475,"yard":1.8559,"logistics":0.7619,"docs":0.1291,"rto":7.385,"refurb":2.2352,"insurance":2.1495,"broker":0.09,"sales_incentive":0.0989,"retail_sal":0.1036,"proc_sal":0.1005,"ops_sal":0.1968,"drivers_sal":0.6045,"others_hk":0.1216,"sales_sal":4.8964,"rental":3.0069,"zero_salary_centres":0},"MP":{"centres":23,"deliveries":53,"tractor_sale":229.9465,"other_rev":0.452,"cancel_rev":0.532,"finance_inc":4.6375,"total_rev":235.568,"cogs":192.43,"yard":2.3382,"logistics":2.1665,"docs":0.4789,"rto":10.5478,"refurb":9.9843,"insurance":3.9146,"broker":0.32,"sales_incentive":0.1941,"retail_sal":0.2034,"proc_sal":0.1972,"ops_sal":0.3864,"drivers_sal":0.6984,"others_hk":1.2597,"sales_sal":6.887,"rental":5.2511,"zero_salary_centres":2},"RJ":{"centres":26,"deliveries":109,"tractor_sale":440.5602,"other_rev":10.155,"cancel_rev":1.365,"finance_inc":7.0806,"total_rev":459.1608,"cogs":390.6775,"yard":5.2511,"logistics":2.5857,"docs":0.4834,"rto":6.2063,"refurb":14.969,"insurance":6.7849,"broker":0.1,"sales_incentive":0.3991,"retail_sal":0.4184,"proc_sal":0.4055,"ops_sal":0.7946,"drivers_sal":1.0814,"others_hk":1.3644,"sales_sal":7.5847,"rental":7.4244,"zero_salary_centres":0},"TL":{"centres":2,"deliveries":2,"tractor_sale":8.7807,"other_rev":0.185,"cancel_rev":0.0,"finance_inc":0.2158,"total_rev":9.1815,"cogs":7.62,"yard":0.1715,"logistics":0.1125,"docs":0.014,"rto":1.505,"refurb":0.2394,"insurance":0.1782,"broker":0.0,"sales_incentive":0.0073,"retail_sal":0.0077,"proc_sal":0.0074,"ops_sal":0.0146,"drivers_sal":0.12,"others_hk":0.1645,"sales_sal":0.1127,"rental":0.51,"zero_salary_centres":0}},"2025-05":{"GJ":{"centres":2,"deliveries":3,"tractor_sale":10.7779,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.1993,"total_rev":10.9772,"cogs":9.219,"yard":0.223,"logistics":0.085,"docs":0.0278,"rto":0.548,"refurb":0.2845,"insurance":0.2002,"broker":0.0,"sales_incentive":0.0127,"retail_sal":0.0136,"proc_sal":0.0089,"ops_sal":0.0226,"drivers_sal":0.12,"others_hk":0.0917,"sales_sal":0.3452,"rental":0.33,"zero_salary_centres":0},"MH":{"centres":10,"deliveries":34,"tractor_sale":182.3922,"other_rev":0.005,"cancel_rev":0.131,"finance_inc":3.4586,"total_rev":185.9868,"cogs":163.592,"yard":1.8265,"logistics":1.0605,"docs":0.2138,"rto":12.484,"refurb":3.3712,"insurance":3.8793,"broker":0.15,"sales_incentive":0.1434,"retail_sal":0.1543,"proc_sal":0.1007,"ops_sal":0.2566,"drivers_sal":0.473,"others_hk":0.1213,"sales_sal":5.0074,"rental":3.0224,"zero_salary_centres":0},"MP":{"centres":24,"deliveries":81,"tractor_sale":327.0693,"other_rev":0.235,"cancel_rev":0.9595,"finance_inc":6.7925,"total_rev":335.0563,"cogs":281.381,"yard":3.8912,"logistics":2.6961,"docs":0.6084,"rto":15.2801,"refurb":8.9103,"insurance":6.5775,"broker":0.3351,"sales_incentive":0.3417,"retail_sal":0.3676,"proc_sal":0.2399,"ops_sal":0.6114,"drivers_sal":0.659,"others_hk":0.9076,"sales_sal":6.2178,"rental":5.2511,"zero_salary_centres":1},"RJ":{"centres":26,"deliveries":123,"tractor_sale":479.5157,"other_rev":10.61,"cancel_rev":0.827,"finance_inc":6.9166,"total_rev":497.8693,"cogs":436.5545,"yard":4.2171,"logistics":2.7333,"docs":0.4959,"rto":4.19,"refurb":12.4615,"insurance":6.2663,"broker":0.05,"sales_incentive":0.5189,"retail_sal":0.5583,"proc_sal":0.3642,"ops_sal":0.9284,"drivers_sal":1.1171,"others_hk":1.4713,"sales_sal":8.7857,"rental":7.3044,"zero_salary_centres":1},"TL":{"centres":2,"deliveries":4,"tractor_sale":15.3429,"other_rev":0.0,"cancel_rev":0.2005,"finance_inc":0.3548,"total_rev":15.8982,"cogs":13.075,"yard":0.372,"logistics":0.0805,"docs":0.036,"rto":1.092,"refurb":0.0,"insurance":0.2832,"broker":0.0,"sales_incentive":0.0169,"retail_sal":0.0182,"proc_sal":0.0118,"ops_sal":0.0302,"drivers_sal":0.12,"others_hk":0.1967,"sales_sal":0.1031,"rental":0.51,"zero_salary_centres":0}},"2025-06":{"GJ":{"centres":2,"deliveries":12,"tractor_sale":36.7051,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.3237,"total_rev":37.0288,"cogs":34.0475,"yard":0.5477,"logistics":0.1876,"docs":0.099,"rto":1.8185,"refurb":0.384,"insurance":0.3939,"broker":0.0,"sales_incentive":0.0625,"retail_sal":0.0469,"proc_sal":0.0406,"ops_sal":0.1066,"drivers_sal":0.12,"others_hk":0.0952,"sales_sal":0.284,"rental":0.33,"zero_salary_centres":0},"MH":{"centres":10,"deliveries":24,"tractor_sale":124.5573,"other_rev":0.005,"cancel_rev":0.054,"finance_inc":2.8839,"total_rev":127.5002,"cogs":111.2645,"yard":1.6588,"logistics":0.593,"docs":0.1133,"rto":9.311,"refurb":1.5463,"insurance":2.4049,"broker":0.05,"sales_incentive":0.1251,"retail_sal":0.0938,"proc_sal":0.0812,"ops_sal":0.2133,"drivers_sal":0.36,"others_hk":0.2342,"sales_sal":4.8776,"rental":3.0158,"zero_salary_centres":0},"MP":{"centres":24,"deliveries":78,"tractor_sale":320.7927,"other_rev":0.5468,"cancel_rev":1.008,"finance_inc":6.6984,"total_rev":329.0459,"cogs":282.1952,"yard":3.7746,"logistics":3.3195,"docs":0.6643,"rto":15.7589,"refurb":8.732,"insurance":5.6706,"broker":0.199,"sales_incentive":0.4066,"retail_sal":0.3047,"proc_sal":0.2638,"ops_sal":0.6932,"drivers_sal":0.5768,"others_hk":1.3435,"sales_sal":6.2666,"rental":5.1277,"zero_salary_centres":1},"RJ":{"centres":26,"deliveries":125,"tractor_sale":452.6081,"other_rev":8.37,"cancel_rev":0.642,"finance_inc":7.6371,"total_rev":469.2572,"cogs":413.367,"yard":3.9466,"logistics":2.7643,"docs":0.4048,"rto":4.0821,"refurb":10.9418,"insurance":5.4304,"broker":0.05,"sales_incentive":0.6516,"retail_sal":0.4883,"proc_sal":0.4227,"ops_sal":1.1109,"drivers_sal":1.143,"others_hk":1.6039,"sales_sal":9.3808,"rental":7.4533,"zero_salary_centres":1},"TL":{"centres":2,"deliveries":2,"tractor_sale":7.8864,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.1322,"total_rev":8.0186,"cogs":7.19,"yard":0.1213,"logistics":0.017,"docs":0.024,"rto":0.99,"refurb":0.046,"insurance":0.1648,"broker":0.0,"sales_incentive":0.0104,"retail_sal":0.0078,"proc_sal":0.0068,"ops_sal":0.0178,"drivers_sal":0.12,"others_hk":0.129,"sales_sal":0.1018,"rental":0.51,"zero_salary_centres":0}},"2025-07":{"GJ":{"centres":2,"deliveries":3,"tractor_sale":14.3357,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.2527,"total_rev":14.5884,"cogs":13.383,"yard":0.273,"logistics":0.0848,"docs":0.0282,"rto":0.5365,"refurb":0.0252,"insurance":0.1546,"broker":0.0,"sales_incentive":0.0199,"retail_sal":0.0152,"proc_sal":0.015,"ops_sal":0.0339,"drivers_sal":0.1344,"others_hk":0.0933,"sales_sal":0.348,"rental":0.33,"zero_salary_centres":0},"MH":{"centres":10,"deliveries":26,"tractor_sale":145.5998,"other_rev":0.0,"cancel_rev":0.046,"finance_inc":2.9053,"total_rev":148.5511,"cogs":131.5629,"yard":1.7358,"logistics":1.0401,"docs":0.1329,"rto":9.823,"refurb":2.6972,"insurance":2.5829,"broker":0.15,"sales_incentive":0.1728,"retail_sal":0.1317,"proc_sal":0.1298,"ops_sal":0.294,"drivers_sal":0.2461,"others_hk":0.25,"sales_sal":4.8264,"rental":3.0224,"zero_salary_centres":0},"MP":{"centres":28,"deliveries":54,"tractor_sale":213.3837,"other_rev":0.3886,"cancel_rev":1.0491,"finance_inc":5.2068,"total_rev":220.0282,"cogs":194.8122,"yard":2.3759,"logistics":1.943,"docs":0.4421,"rto":9.2191,"refurb":5.8276,"insurance":3.6144,"broker":0.05,"sales_incentive":0.3589,"retail_sal":0.2736,"proc_sal":0.2695,"ops_sal":0.6106,"drivers_sal":0.6841,"others_hk":1.1668,"sales_sal":5.5187,"rental":5.2259,"zero_salary_centres":6},"RJ":{"centres":26,"deliveries":81,"tractor_sale":302.0406,"other_rev":5.775,"cancel_rev":0.526,"finance_inc":5.2274,"total_rev":313.569,"cogs":272.3155,"yard":2.7925,"logistics":1.5605,"docs":0.334,"rto":3.0489,"refurb":9.3629,"insurance":3.4146,"broker":0.16,"sales_incentive":0.5384,"retail_sal":0.4104,"proc_sal":0.4043,"ops_sal":0.9159,"drivers_sal":1.0569,"others_hk":1.3777,"sales_sal":8.9235,"rental":7.4273,"zero_salary_centres":1},"TL":{"centres":2,"deliveries":1,"tractor_sale":3.8882,"other_rev":0.185,"cancel_rev":0.0,"finance_inc":0.133,"total_rev":4.2062,"cogs":3.79,"yard":0.0955,"logistics":0.0,"docs":0.0029,"rto":0.395,"refurb":0.2185,"insurance":0.1557,"broker":0.0,"sales_incentive":0.0066,"retail_sal":0.0051,"proc_sal":0.005,"ops_sal":0.0113,"drivers_sal":0.12,"others_hk":0.2,"sales_sal":0.1145,"rental":0.51,"zero_salary_centres":0}},"2025-08":{"GJ":{"centres":3,"deliveries":1,"tractor_sale":2.0737,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0,"total_rev":2.0737,"cogs":2.0215,"yard":0.049,"logistics":0.0233,"docs":0.0089,"rto":0.005,"refurb":0.0091,"insurance":0.0,"broker":0.0,"sales_incentive":0.0049,"retail_sal":0.0037,"proc_sal":0.0037,"ops_sal":0.0086,"drivers_sal":0.2495,"others_hk":0.0903,"sales_sal":0.3819,"rental":0.33,"zero_salary_centres":0},"MH":{"centres":10,"deliveries":25,"tractor_sale":137.1757,"other_rev":0.0,"cancel_rev":0.081,"finance_inc":3.1392,"total_rev":140.3959,"cogs":121.39,"yard":2.4883,"logistics":1.6415,"docs":0.1408,"rto":9.655,"refurb":1.8243,"insurance":2.5559,"broker":0.0,"sales_incentive":0.1227,"retail_sal":0.0933,"proc_sal":0.0919,"ops_sal":0.2146,"drivers_sal":0.2756,"others_hk":0.24,"sales_sal":5.6649,"rental":3.0429,"zero_salary_centres":0},"MP":{"centres":28,"deliveries":70,"tractor_sale":281.1488,"other_rev":0.343,"cancel_rev":0.951,"finance_inc":5.9348,"total_rev":288.3776,"cogs":247.0009,"yard":3.5249,"logistics":3.2722,"docs":0.6289,"rto":11.039,"refurb":6.3301,"insurance":4.2772,"broker":0.4453,"sales_incentive":0.3437,"retail_sal":0.2612,"proc_sal":0.2574,"ops_sal":0.601,"drivers_sal":0.7281,"others_hk":1.2394,"sales_sal":5.8047,"rental":5.5119,"zero_salary_centres":4},"RJ":{"centres":26,"deliveries":128,"tractor_sale":448.2466,"other_rev":8.885,"cancel_rev":0.37,"finance_inc":7.2512,"total_rev":464.7528,"cogs":410.3026,"yard":3.6854,"logistics":2.3103,"docs":0.4205,"rto":4.242,"refurb":10.6809,"insurance":5.7726,"broker":0.26,"sales_incentive":0.6285,"retail_sal":0.4777,"proc_sal":0.4706,"ops_sal":1.099,"drivers_sal":0.8863,"others_hk":1.4288,"sales_sal":9.7707,"rental":7.2937,"zero_salary_centres":2},"TL":{"centres":2,"deliveries":0,"tractor_sale":0.0,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0,"total_rev":0.0,"cogs":0.0,"yard":0.0,"logistics":0.0,"docs":0.0,"rto":0.0,"refurb":0.0,"insurance":0.0,"broker":0.0,"sales_incentive":0.0,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.12,"others_hk":0.1968,"sales_sal":0.12,"rental":0.51,"zero_salary_centres":0}},"2025-09":{"CG":{"centres":1,"deliveries":0,"tractor_sale":0.0,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0,"total_rev":0.0,"cogs":0.0,"yard":0.0,"logistics":0.0,"docs":0.0,"rto":0.0,"refurb":0.0,"insurance":0.0,"broker":0.0,"sales_incentive":0.0,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":0.1467,"zero_salary_centres":1},"GJ":{"centres":3,"deliveries":4,"tractor_sale":15.631,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0,"total_rev":15.631,"cogs":15.411,"yard":0.205,"logistics":0.0526,"docs":0.0267,"rto":0.247,"refurb":0.0705,"insurance":0.05,"broker":0.0,"sales_incentive":0.0208,"retail_sal":0.0151,"proc_sal":0.0152,"ops_sal":0.0359,"drivers_sal":0.2652,"others_hk":0.1,"sales_sal":0.5067,"rental":0.53,"zero_salary_centres":0},"MH":{"centres":10,"deliveries":23,"tractor_sale":117.0132,"other_rev":0.005,"cancel_rev":0.02,"finance_inc":3.786,"total_rev":120.8242,"cogs":103.621,"yard":1.8396,"logistics":0.8709,"docs":0.1497,"rto":8.344,"refurb":2.1218,"insurance":1.7375,"broker":0.15,"sales_incentive":0.1194,"retail_sal":0.0866,"proc_sal":0.0873,"ops_sal":0.2062,"drivers_sal":0.216,"others_hk":0.2381,"sales_sal":3.8567,"rental":2.7819,"zero_salary_centres":1},"MP":{"centres":30,"deliveries":92,"tractor_sale":346.4776,"other_rev":0.605,"cancel_rev":1.323,"finance_inc":10.2408,"total_rev":358.6464,"cogs":301.1006,"yard":4.3354,"logistics":3.0115,"docs":0.6949,"rto":15.221,"refurb":11.573,"insurance":4.4479,"broker":0.8758,"sales_incentive":0.4775,"retail_sal":0.3463,"proc_sal":0.3491,"ops_sal":0.8247,"drivers_sal":0.8517,"others_hk":1.4328,"sales_sal":5.6812,"rental":6.3103,"zero_salary_centres":4},"RJ":{"centres":27,"deliveries":97,"tractor_sale":359.8186,"other_rev":8.77,"cancel_rev":0.692,"finance_inc":7.2416,"total_rev":376.5222,"cogs":329.8389,"yard":3.994,"logistics":2.9055,"docs":0.3399,"rto":4.2854,"refurb":7.6563,"insurance":3.9927,"broker":0.5035,"sales_incentive":0.5035,"retail_sal":0.3652,"proc_sal":0.3681,"ops_sal":0.8695,"drivers_sal":0.9351,"others_hk":1.4155,"sales_sal":9.8735,"rental":7.5546,"zero_salary_centres":2},"TL":{"centres":2,"deliveries":1,"tractor_sale":2.9551,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.042,"total_rev":2.9971,"cogs":2.581,"yard":0.0399,"logistics":0.0219,"docs":0.0047,"rto":0.415,"refurb":0.0,"insurance":0.0651,"broker":0.0,"sales_incentive":0.0052,"retail_sal":0.0038,"proc_sal":0.0038,"ops_sal":0.009,"drivers_sal":0.12,"others_hk":0.1968,"sales_sal":0.1138,"rental":0.51,"zero_salary_centres":0}},"2025-10":{"CG":{"centres":1,"deliveries":0,"tractor_sale":0.0,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0,"total_rev":0.0,"cogs":0.0,"yard":0.0,"logistics":0.0,"docs":0.0,"rto":0.0,"refurb":0.0,"insurance":0.0,"broker":0.0,"sales_incentive":0.0,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.1367,"rental":0.2,"zero_salary_centres":0},"GJ":{"centres":3,"deliveries":1,"tractor_sale":3.3755,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.1134,"total_rev":3.4889,"cogs":2.886,"yard":0.059,"logistics":0.0,"docs":0.0119,"rto":0.185,"refurb":0.009,"insurance":0.0582,"broker":0.0,"sales_incentive":0.005,"retail_sal":0.0038,"proc_sal":0.0035,"ops_sal":0.0088,"drivers_sal":0.2595,"others_hk":0.0917,"sales_sal":0.3648,"rental":0.53,"zero_salary_centres":0},"MH":{"centres":10,"deliveries":20,"tractor_sale":91.338,"other_rev":0.005,"cancel_rev":0.01,"finance_inc":2.6313,"total_rev":93.9843,"cogs":80.0975,"yard":1.1737,"logistics":1.1091,"docs":0.113,"rto":7.781,"refurb":2.7828,"insurance":2.0272,"broker":0.0,"sales_incentive":0.0991,"retail_sal":0.076,"proc_sal":0.0708,"ops_sal":0.1751,"drivers_sal":0.3584,"others_hk":0.2413,"sales_sal":3.7654,"rental":2.7824,"zero_salary_centres":1},"MP":{"centres":30,"deliveries":78,"tractor_sale":301.5919,"other_rev":0.43,"cancel_rev":0.528,"finance_inc":9.2471,"total_rev":311.797,"cogs":264.8448,"yard":3.937,"logistics":3.4378,"docs":0.5596,"rto":13.2555,"refurb":9.6698,"insurance":3.9052,"broker":0.45,"sales_incentive":0.3865,"retail_sal":0.2964,"proc_sal":0.2761,"ops_sal":0.6828,"drivers_sal":1.0109,"others_hk":1.6793,"sales_sal":7.2795,"rental":6.4179,"zero_salary_centres":4},"RJ":{"centres":28,"deliveries":120,"tractor_sale":415.7977,"other_rev":10.725,"cancel_rev":0.354,"finance_inc":8.5529,"total_rev":435.4296,"cogs":386.594,"yard":4.6303,"logistics":2.964,"docs":0.4342,"rto":4.218,"refurb":8.6887,"insurance":4.4467,"broker":0.3,"sales_incentive":0.5945,"retail_sal":0.456,"proc_sal":0.4248,"ops_sal":1.0505,"drivers_sal":1.0954,"others_hk":1.6187,"sales_sal":8.726,"rental":7.7405,"zero_salary_centres":3},"TL":{"centres":2,"deliveries":1,"tractor_sale":5.6821,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.2107,"total_rev":5.8928,"cogs":5.325,"yard":0.1225,"logistics":0.0,"docs":0.009,"rto":0.325,"refurb":0.0,"insurance":0.0693,"broker":0.05,"sales_incentive":0.005,"retail_sal":0.0038,"proc_sal":0.0035,"ops_sal":0.0088,"drivers_sal":0.12,"others_hk":0.2,"sales_sal":-0.005,"rental":0.51,"zero_salary_centres":0}},"2025-11":{"CG":{"centres":1,"deliveries":1,"tractor_sale":4.2376,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0,"total_rev":4.2376,"cogs":3.99,"yard":0.2013,"logistics":0.1545,"docs":0.0051,"rto":0.381,"refurb":0.0,"insurance":0.0625,"broker":0.0,"sales_incentive":0.0039,"retail_sal":0.0047,"proc_sal":0.0037,"ops_sal":0.0109,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.1961,"rental":0.2,"zero_salary_centres":0},"GJ":{"centres":3,"deliveries":7,"tractor_sale":22.9904,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.3488,"total_rev":23.3392,"cogs":22.1135,"yard":0.454,"logistics":0.2948,"docs":0.055,"rto":0.9325,"refurb":0.4755,"insurance":0.2361,"broker":0.05,"sales_incentive":0.0275,"retail_sal":0.0326,"proc_sal":0.0258,"ops_sal":0.0762,"drivers_sal":0.1403,"others_hk":0.0,"sales_sal":0.3487,"rental":0.4,"zero_salary_centres":1},"MH":{"centres":10,"deliveries":19,"tractor_sale":90.2003,"other_rev":0.01,"cancel_rev":0.0,"finance_inc":2.3478,"total_rev":92.5581,"cogs":79.8055,"yard":1.36,"logistics":1.1842,"docs":0.1198,"rto":7.424,"refurb":3.2117,"insurance":1.7651,"broker":0.0,"sales_incentive":0.0747,"retail_sal":0.0886,"proc_sal":0.07,"ops_sal":0.2069,"drivers_sal":0.2824,"others_hk":0.0,"sales_sal":3.6177,"rental":2.7499,"zero_salary_centres":2},"MP":{"centres":31,"deliveries":52,"tractor_sale":175.5185,"other_rev":0.242,"cancel_rev":0.491,"finance_inc":4.4943,"total_rev":180.7458,"cogs":152.18,"yard":2.2693,"logistics":2.4833,"docs":0.3325,"rto":6.8465,"refurb":6.5287,"insurance":2.4571,"broker":0.0,"sales_incentive":0.2045,"retail_sal":0.2424,"proc_sal":0.1915,"ops_sal":0.5663,"drivers_sal":1.8533,"others_hk":1.7844,"sales_sal":7.3351,"rental":6.4666,"zero_salary_centres":7},"RJ":{"centres":28,"deliveries":95,"tractor_sale":353.181,"other_rev":10.14,"cancel_rev":0.432,"finance_inc":8.4822,"total_rev":372.2352,"cogs":326.257,"yard":3.9329,"logistics":2.77,"docs":0.3548,"rto":6.0579,"refurb":7.9036,"insurance":4.7008,"broker":0.19,"sales_incentive":0.3736,"retail_sal":0.4428,"proc_sal":0.3499,"ops_sal":1.0346,"drivers_sal":1.2033,"others_hk":1.5244,"sales_sal":9.5154,"rental":7.7405,"zero_salary_centres":2},"TL":{"centres":2,"deliveries":4,"tractor_sale":11.3536,"other_rev":0.0,"cancel_rev":0.4,"finance_inc":0.3588,"total_rev":12.1124,"cogs":9.725,"yard":0.2211,"logistics":0.0583,"docs":0.0097,"rto":1.103,"refurb":0.277,"insurance":0.2668,"broker":0.0,"sales_incentive":0.0157,"retail_sal":0.0186,"proc_sal":0.0147,"ops_sal":0.0436,"drivers_sal":0.12,"others_hk":0.1,"sales_sal":-0.0157,"rental":0.51,"zero_salary_centres":0}},"2025-12":{"CG":{"centres":1,"deliveries":4,"tractor_sale":17.8267,"other_rev":0.0,"cancel_rev":0.05,"finance_inc":0.5309,"total_rev":18.4076,"cogs":14.36,"yard":0.3039,"logistics":0.1264,"docs":0.0201,"rto":0.68,"refurb":0.498,"insurance":0.2584,"broker":0.05,"sales_incentive":0.0169,"retail_sal":0.0128,"proc_sal":0.013,"ops_sal":0.0326,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.2754,"rental":0.2,"zero_salary_centres":0},"GJ":{"centres":4,"deliveries":7,"tractor_sale":23.4358,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.4704,"total_rev":23.9062,"cogs":22.544,"yard":0.2964,"logistics":0.3759,"docs":0.04,"rto":0.6471,"refurb":0.5391,"insurance":0.2407,"broker":0.0,"sales_incentive":0.0296,"retail_sal":0.0223,"proc_sal":0.0227,"ops_sal":0.057,"drivers_sal":0.105,"others_hk":0.0,"sales_sal":0.5376,"rental":0.5097,"zero_salary_centres":2},"MH":{"centres":10,"deliveries":27,"tractor_sale":122.7841,"other_rev":0.01,"cancel_rev":0.15,"finance_inc":2.6657,"total_rev":125.6098,"cogs":108.5223,"yard":2.0843,"logistics":2.1493,"docs":0.1733,"rto":9.7116,"refurb":3.1805,"insurance":1.7924,"broker":0.15,"sales_incentive":0.1141,"retail_sal":0.0861,"proc_sal":0.0874,"ops_sal":0.2197,"drivers_sal":0.4002,"others_hk":0.0,"sales_sal":3.3928,"rental":2.4569,"zero_salary_centres":2},"MP":{"centres":34,"deliveries":78,"tractor_sale":238.6328,"other_rev":0.63,"cancel_rev":0.417,"finance_inc":6.4428,"total_rev":246.1226,"cogs":211.6833,"yard":3.2399,"logistics":3.8821,"docs":0.5218,"rto":8.052,"refurb":7.7507,"insurance":3.851,"broker":0.25,"sales_incentive":0.3295,"retail_sal":0.2488,"proc_sal":0.2526,"ops_sal":0.6348,"drivers_sal":0.7787,"others_hk":1.656,"sales_sal":7.0922,"rental":6.5661,"zero_salary_centres":7},"RJ":{"centres":32,"deliveries":139,"tractor_sale":464.5105,"other_rev":10.66,"cancel_rev":0.503,"finance_inc":8.7994,"total_rev":484.4729,"cogs":425.819,"yard":5.2177,"logistics":4.309,"docs":0.4475,"rto":3.505,"refurb":13.2887,"insurance":4.862,"broker":0.32,"sales_incentive":0.5872,"retail_sal":0.4433,"proc_sal":0.4502,"ops_sal":1.1313,"drivers_sal":1.1504,"others_hk":1.5888,"sales_sal":8.174,"rental":8.1372,"zero_salary_centres":2},"TL":{"centres":2,"deliveries":3,"tractor_sale":12.0709,"other_rev":0.0,"cancel_rev":0.15,"finance_inc":0.4983,"total_rev":12.7192,"cogs":11.05,"yard":0.3671,"logistics":0.0357,"docs":0.0113,"rto":1.11,"refurb":0.1288,"insurance":0.2497,"broker":0.0,"sales_incentive":0.0127,"retail_sal":0.0096,"proc_sal":0.0097,"ops_sal":0.0244,"drivers_sal":0.12,"others_hk":0.1583,"sales_sal":-0.0127,"rental":0.51,"zero_salary_centres":0}},"2026-01":{"CG":{"centres":3,"deliveries":3,"tractor_sale":11.9329,"other_rev":0.055,"cancel_rev":0.05,"finance_inc":0.4851,"total_rev":12.523,"cogs":9.5902,"yard":0.2808,"logistics":0.1695,"docs":0.0143,"rto":1.1,"refurb":0.166,"insurance":0.2366,"broker":0.0,"sales_incentive":0.0128,"retail_sal":0.0097,"proc_sal":0.0077,"ops_sal":0.0247,"drivers_sal":0.12,"others_hk":0.1102,"sales_sal":0.9095,"rental":0.2,"zero_salary_centres":0},"GJ":{"centres":5,"deliveries":6,"tractor_sale":22.2239,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.2016,"total_rev":22.4255,"cogs":20.705,"yard":0.373,"logistics":0.2376,"docs":0.0465,"rto":0.632,"refurb":0.6149,"insurance":0.3082,"broker":0.0,"sales_incentive":0.0255,"retail_sal":0.0194,"proc_sal":0.0154,"ops_sal":0.0493,"drivers_sal":0.0,"others_hk":0.0037,"sales_sal":1.2335,"rental":0.82,"zero_salary_centres":2},"MH":{"centres":11,"deliveries":23,"tractor_sale":101.5354,"other_rev":0.0,"cancel_rev":0.025,"finance_inc":2.5175,"total_rev":104.0779,"cogs":92.7138,"yard":1.7865,"logistics":1.8102,"docs":0.1243,"rto":7.239,"refurb":3.0481,"insurance":1.4215,"broker":0.0,"sales_incentive":0.0979,"retail_sal":0.0745,"proc_sal":0.0589,"ops_sal":0.1891,"drivers_sal":0.4892,"others_hk":0.014,"sales_sal":3.7155,"rental":2.6566,"zero_salary_centres":3},"MP":{"centres":37,"deliveries":89,"tractor_sale":325.7663,"other_rev":0.797,"cancel_rev":0.652,"finance_inc":8.2602,"total_rev":335.4755,"cogs":287.0748,"yard":4.627,"logistics":5.5063,"docs":0.696,"rto":14.7432,"refurb":13.0326,"insurance":6.0263,"broker":0.53,"sales_incentive":0.3789,"retail_sal":0.2884,"proc_sal":0.2279,"ops_sal":0.7316,"drivers_sal":0.7484,"others_hk":2.2556,"sales_sal":8.6433,"rental":7.3047,"zero_salary_centres":6},"RJ":{"centres":35,"deliveries":134,"tractor_sale":476.5988,"other_rev":10.365,"cancel_rev":0.853,"finance_inc":8.0972,"total_rev":495.914,"cogs":438.2915,"yard":4.823,"logistics":5.4509,"docs":0.5091,"rto":3.519,"refurb":8.1404,"insurance":4.1292,"broker":0.2,"sales_incentive":0.5705,"retail_sal":0.4343,"proc_sal":0.3431,"ops_sal":1.1016,"drivers_sal":0.8692,"others_hk":1.7151,"sales_sal":9.1208,"rental":9.0091,"zero_salary_centres":4},"TL":{"centres":3,"deliveries":1,"tractor_sale":3.2555,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.1383,"total_rev":3.3938,"cogs":2.665,"yard":0.0434,"logistics":0.0529,"docs":0.009,"rto":0.4,"refurb":0.0995,"insurance":0.086,"broker":0.0,"sales_incentive":0.0043,"retail_sal":0.0032,"proc_sal":0.0026,"ops_sal":0.0082,"drivers_sal":0.12,"others_hk":0.2619,"sales_sal":-0.0043,"rental":0.635,"zero_salary_centres":0}},"2026-02":{"CG":{"centres":4,"deliveries":7,"tractor_sale":25.666,"other_rev":0.04,"cancel_rev":0.0,"finance_inc":0.6069,"total_rev":26.3129,"cogs":19.986,"yard":0.6345,"logistics":0.7453,"docs":0.0399,"rto":1.75,"refurb":0.5864,"insurance":0.5853,"broker":0.0,"sales_incentive":0.0242,"retail_sal":0.0234,"proc_sal":0.0184,"ops_sal":0.0612,"drivers_sal":0.1839,"others_hk":0.179,"sales_sal":1.1286,"rental":0.8,"zero_salary_centres":0},"GJ":{"centres":5,"deliveries":6,"tractor_sale":21.7191,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.3725,"total_rev":22.0916,"cogs":20.9028,"yard":0.2318,"logistics":0.4707,"docs":0.0406,"rto":0.589,"refurb":0.2898,"insurance":0.2914,"broker":0.0,"sales_incentive":0.0207,"retail_sal":0.0201,"proc_sal":0.0157,"ops_sal":0.0525,"drivers_sal":0.1216,"others_hk":0.0407,"sales_sal":1.2485,"rental":0.82,"zero_salary_centres":1},"MH":{"centres":11,"deliveries":19,"tractor_sale":89.72,"other_rev":0.0,"cancel_rev":0.041,"finance_inc":2.2071,"total_rev":91.9681,"cogs":83.0152,"yard":1.4176,"logistics":1.9243,"docs":0.134,"rto":5.853,"refurb":3.2879,"insurance":1.3309,"broker":0.0,"sales_incentive":0.0655,"retail_sal":0.0635,"proc_sal":0.0498,"ops_sal":0.1662,"drivers_sal":0.2052,"others_hk":0.0309,"sales_sal":4.2082,"rental":2.5804,"zero_salary_centres":2},"MP":{"centres":38,"deliveries":97,"tractor_sale":358.7313,"other_rev":0.68,"cancel_rev":1.218,"finance_inc":8.5579,"total_rev":369.1872,"cogs":325.8676,"yard":4.828,"logistics":5.5957,"docs":0.7252,"rto":14.4714,"refurb":14.6463,"insurance":7.1188,"broker":0.15,"sales_incentive":0.3347,"retail_sal":0.3244,"proc_sal":0.2544,"ops_sal":0.8487,"drivers_sal":0.9202,"others_hk":2.3997,"sales_sal":9.6986,"rental":7.9725,"zero_salary_centres":7},"RJ":{"centres":35,"deliveries":118,"tractor_sale":432.7232,"other_rev":8.18,"cancel_rev":0.603,"finance_inc":6.5133,"total_rev":448.0195,"cogs":397.8981,"yard":5.0399,"logistics":4.2103,"docs":0.3943,"rto":3.354,"refurb":10.8258,"insurance":3.501,"broker":0.15,"sales_incentive":0.4071,"retail_sal":0.3946,"proc_sal":0.3094,"ops_sal":1.0324,"drivers_sal":0.8535,"others_hk":1.8922,"sales_sal":11.234,"rental":9.4145,"zero_salary_centres":3},"TL":{"centres":3,"deliveries":3,"tractor_sale":7.5638,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.249,"total_rev":7.8128,"cogs":6.14,"yard":0.1836,"logistics":0.7692,"docs":0.0,"rto":1.5,"refurb":0.0245,"insurance":0.2219,"broker":0.0,"sales_incentive":0.0103,"retail_sal":0.01,"proc_sal":0.0079,"ops_sal":0.0262,"drivers_sal":0.12,"others_hk":0.3049,"sales_sal":0.1609,"rental":0.635,"zero_salary_centres":0}},"2026-03":{"CG":{"centres":4,"deliveries":10,"tractor_sale":43.2201,"other_rev":0.11,"cancel_rev":0.05,"finance_inc":1.7472,"total_rev":45.1273,"cogs":29.622,"yard":0.7682,"logistics":0.7498,"docs":0.04,"rto":3.51,"refurb":1.4393,"insurance":0.8361,"broker":0.0,"sales_incentive":0.0243,"retail_sal":0.0266,"proc_sal":0.0219,"ops_sal":0.0759,"drivers_sal":0.1285,"others_hk":0.3254,"sales_sal":1.1341,"rental":0.8,"zero_salary_centres":0},"GJ":{"centres":5,"deliveries":7,"tractor_sale":28.5936,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.7858,"total_rev":29.3794,"cogs":29.1565,"yard":0.3313,"logistics":0.3711,"docs":0.0188,"rto":1.0338,"refurb":0.7468,"insurance":0.4535,"broker":0.0,"sales_incentive":0.017,"retail_sal":0.0186,"proc_sal":0.0153,"ops_sal":0.0531,"drivers_sal":0.13,"others_hk":0.1003,"sales_sal":1.2133,"rental":0.82,"zero_salary_centres":1},"MH":{"centres":11,"deliveries":14,"tractor_sale":56.2914,"other_rev":0.0,"cancel_rev":0.05,"finance_inc":1.5414,"total_rev":57.8828,"cogs":52.7045,"yard":0.7721,"logistics":0.8411,"docs":0.0416,"rto":3.699,"refurb":2.7492,"insurance":0.7765,"broker":0.0,"sales_incentive":0.0341,"retail_sal":0.0372,"proc_sal":0.0306,"ops_sal":0.1063,"drivers_sal":0.2568,"others_hk":0.0206,"sales_sal":4.8801,"rental":2.6835,"zero_salary_centres":2},"MP":{"centres":38,"deliveries":121,"tractor_sale":461.4768,"other_rev":1.103,"cancel_rev":0.847,"finance_inc":12.2495,"total_rev":475.6763,"cogs":419.6406,"yard":6.9844,"logistics":6.7229,"docs":1.142,"rto":17.9427,"refurb":13.4452,"insurance":7.9572,"broker":0.42,"sales_incentive":0.2944,"retail_sal":0.3218,"proc_sal":0.2647,"ops_sal":0.9184,"drivers_sal":1.2145,"others_hk":2.559,"sales_sal":9.316,"rental":8.276,"zero_salary_centres":6},"RJ":{"centres":37,"deliveries":153,"tractor_sale":521.3953,"other_rev":9.665,"cancel_rev":0.347,"finance_inc":6.276,"total_rev":537.6833,"cogs":475.2514,"yard":5.431,"logistics":4.2854,"docs":0.3962,"rto":3.885,"refurb":11.9961,"insurance":3.5784,"broker":0.13,"sales_incentive":0.3723,"retail_sal":0.407,"proc_sal":0.3347,"ops_sal":1.1612,"drivers_sal":1.0415,"others_hk":1.8878,"sales_sal":13.4954,"rental":10.0537,"zero_salary_centres":4},"TL":{"centres":3,"deliveries":4,"tractor_sale":12.5917,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.1512,"total_rev":12.7429,"cogs":13.6166,"yard":0.2959,"logistics":0.065,"docs":0.0,"rto":1.13,"refurb":0.739,"insurance":0.2184,"broker":0.05,"sales_incentive":0.0097,"retail_sal":0.0106,"proc_sal":0.0087,"ops_sal":0.0304,"drivers_sal":0.12,"others_hk":0.2987,"sales_sal":0.2699,"rental":0.635,"zero_salary_centres":0}},"2026-04":{"CG":{"centres":4,"deliveries":10,"tractor_sale":42.8562,"other_rev":0.16,"cancel_rev":0.0,"finance_inc":1.2015,"total_rev":44.2177,"cogs":35.78,"yard":0.3724,"logistics":0.6278,"docs":0.0504,"rto":3.49,"refurb":1.093,"insurance":0.9234,"broker":0.0,"sales_incentive":0.0281,"retail_sal":0.0287,"proc_sal":0.0219,"ops_sal":0.0691,"drivers_sal":0.1974,"others_hk":0.2894,"sales_sal":1.1124,"rental":0.8,"zero_salary_centres":0},"GJ":{"centres":4,"deliveries":11,"tractor_sale":39.951,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.8861,"total_rev":40.8371,"cogs":35.0495,"yard":0.4178,"logistics":0.3667,"docs":0.0925,"rto":0.78,"refurb":1.0719,"insurance":0.736,"broker":0.05,"sales_incentive":0.0309,"retail_sal":0.0316,"proc_sal":0.0523,"ops_sal":0.076,"drivers_sal":0.2171,"others_hk":0.1175,"sales_sal":1.2724,"rental":0.82,"zero_salary_centres":0},"MH":{"centres":8,"deliveries":25,"tractor_sale":115.0687,"other_rev":0.005,"cancel_rev":0.081,"finance_inc":2.9178,"total_rev":118.0725,"cogs":104.143,"yard":1.0236,"logistics":1.8973,"docs":0.1266,"rto":7.9942,"refurb":3.8983,"insurance":1.297,"broker":0.0,"sales_incentive":0.0702,"retail_sal":0.0717,"proc_sal":0.0546,"ops_sal":0.1728,"drivers_sal":0.29,"others_hk":0.025,"sales_sal":3.7351,"rental":2.4179,"zero_salary_centres":0},"MP":{"centres":32,"deliveries":99,"tractor_sale":356.155,"other_rev":0.805,"cancel_rev":0.62,"finance_inc":8.2479,"total_rev":365.8279,"cogs":331.2231,"yard":4.7993,"logistics":5.4858,"docs":0.838,"rto":13.791,"refurb":11.0634,"insurance":6.1047,"broker":0.4408,"sales_incentive":0.2779,"retail_sal":0.2841,"proc_sal":0.2841,"ops_sal":0.6844,"drivers_sal":1.4116,"others_hk":2.4077,"sales_sal":10.3044,"rental":7.9784,"zero_salary_centres":0},"RJ":{"centres":36,"deliveries":181,"tractor_sale":673.5347,"other_rev":16.955,"cancel_rev":0.759,"finance_inc":12.9687,"total_rev":704.2174,"cogs":618.9186,"yard":7.757,"logistics":5.5696,"docs":0.7235,"rto":5.943,"refurb":20.6305,"insurance":6.9274,"broker":0.63,"sales_incentive":0.508,"retail_sal":0.4449,"proc_sal":1.2228,"ops_sal":1.0715,"drivers_sal":1.2509,"others_hk":1.8686,"sales_sal":13.8915,"rental":10.0599,"zero_salary_centres":2},"TL":{"centres":3,"deliveries":0,"tractor_sale":0.0,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0,"total_rev":0.0,"cogs":0.0,"yard":0.0,"logistics":0.0,"docs":0.0,"rto":0.0,"refurb":0.0,"insurance":0.0,"broker":0.0,"sales_incentive":0.0,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.12,"others_hk":0.3,"sales_sal":0.2802,"rental":0.692,"zero_salary_centres":0}},"2026-05":{"CG":{"centres":4,"deliveries":16,"tractor_sale":62.1272,"other_rev":0.16,"cancel_rev":0.05,"finance_inc":0.7068,"total_rev":63.044,"cogs":51.32,"yard":0.6652,"logistics":0.8542,"docs":0.0934,"rto":5.28,"refurb":2.7072,"insurance":1.2209,"broker":0.0,"sales_incentive":0.0672,"retail_sal":0.0433,"proc_sal":0.0339,"ops_sal":0.1139,"drivers_sal":0.24,"others_hk":0.234,"sales_sal":1.2331,"rental":0.8,"zero_salary_centres":0},"GJ":{"centres":4,"deliveries":13,"tractor_sale":43.4999,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.9268,"total_rev":44.4267,"cogs":39.5648,"yard":0.9199,"logistics":0.628,"docs":0.0798,"rto":1.055,"refurb":0.8704,"insurance":0.5712,"broker":0.0,"sales_incentive":0.0546,"retail_sal":0.0352,"proc_sal":0.0276,"ops_sal":0.0926,"drivers_sal":0.2841,"others_hk":0.096,"sales_sal":1.2345,"rental":0.82,"zero_salary_centres":0},"MH":{"centres":8,"deliveries":13,"tractor_sale":67.6405,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":2.0102,"total_rev":69.6507,"cogs":62.0155,"yard":0.5671,"logistics":0.697,"docs":0.0611,"rto":4.6253,"refurb":0.6657,"insurance":0.9392,"broker":0.0,"sales_incentive":0.0546,"retail_sal":0.0352,"proc_sal":0.4449,"ops_sal":0.0926,"drivers_sal":0.416,"others_hk":0.0,"sales_sal":3.7852,"rental":2.4179,"zero_salary_centres":0},"MP":{"centres":35,"deliveries":141,"tractor_sale":515.8541,"other_rev":0.805,"cancel_rev":0.67,"finance_inc":10.5214,"total_rev":527.8505,"cogs":472.7481,"yard":5.7406,"logistics":7.5492,"docs":1.0838,"rto":16.5096,"refurb":15.6624,"insurance":7.4574,"broker":0.15,"sales_incentive":0.5924,"retail_sal":0.3301,"proc_sal":0.3655,"ops_sal":0.8686,"drivers_sal":1.3099,"others_hk":2.3781,"sales_sal":9.7268,"rental":7.9535,"zero_salary_centres":1},"RJ":{"centres":37,"deliveries":173,"tractor_sale":702.757,"other_rev":14.515,"cancel_rev":0.653,"finance_inc":9.9083,"total_rev":727.8333,"cogs":663.793,"yard":6.6586,"logistics":5.823,"docs":0.7292,"rto":5.074,"refurb":20.0658,"insurance":5.0259,"broker":0.2,"sales_incentive":0.7269,"retail_sal":0.3896,"proc_sal":1.5443,"ops_sal":1.0253,"drivers_sal":1.1487,"others_hk":1.5014,"sales_sal":15.0781,"rental":9.9045,"zero_salary_centres":3},"TL":{"centres":3,"deliveries":1,"tractor_sale":2.595,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0885,"total_rev":2.6835,"cogs":3.3215,"yard":0.0732,"logistics":0.0473,"docs":0.007,"rto":0.37,"refurb":0.0874,"insurance":0.0,"broker":0.0,"sales_incentive":0.0042,"retail_sal":0.0027,"proc_sal":0.0021,"ops_sal":0.0071,"drivers_sal":0.12,"others_hk":0.27,"sales_sal":0.221,"rental":0.654,"zero_salary_centres":0}},"2026-06":{"CG":{"centres":4,"deliveries":11,"tractor_sale":36.3612,"other_rev":0.06,"cancel_rev":0.1,"finance_inc":0.3477,"total_rev":36.8689,"cogs":28.685,"yard":0.5577,"logistics":0.5909,"docs":0.038,"rto":1.276,"refurb":1.2305,"insurance":0.5006,"broker":0.0,"sales_incentive":0.0374,"retail_sal":0.0294,"proc_sal":0.0422,"ops_sal":0.0926,"drivers_sal":0.1548,"others_hk":0.2423,"sales_sal":1.4835,"rental":0.95,"zero_salary_centres":0},"GJ":{"centres":4,"deliveries":18,"tractor_sale":70.5251,"other_rev":0.0,"cancel_rev":0.1,"finance_inc":1.1158,"total_rev":71.7409,"cogs":62.944,"yard":0.7393,"logistics":0.8375,"docs":0.1335,"rto":1.1,"refurb":1.8831,"insurance":0.8773,"broker":0.0,"sales_incentive":0.0612,"retail_sal":0.0482,"proc_sal":0.7433,"ops_sal":0.1515,"drivers_sal":0.1413,"others_hk":0.1161,"sales_sal":1.4536,"rental":0.82,"zero_salary_centres":0},"MH":{"centres":8,"deliveries":26,"tractor_sale":123.9156,"other_rev":0.005,"cancel_rev":0.051,"finance_inc":2.9952,"total_rev":126.9668,"cogs":110.9095,"yard":1.2976,"logistics":1.7637,"docs":0.191,"rto":7.7629,"refurb":3.4514,"insurance":1.4621,"broker":0.0,"sales_incentive":0.0884,"retail_sal":0.0696,"proc_sal":0.5297,"ops_sal":0.2189,"drivers_sal":0.4399,"others_hk":0.0,"sales_sal":4.3475,"rental":2.4329,"zero_salary_centres":0},"MP":{"centres":35,"deliveries":122,"tractor_sale":473.1537,"other_rev":0.522,"cancel_rev":1.2498,"finance_inc":9.8633,"total_rev":484.7888,"cogs":426.412,"yard":4.1315,"logistics":6.3044,"docs":0.9002,"rto":13.5373,"refurb":16.039,"insurance":7.1043,"broker":0.2,"sales_incentive":0.4147,"retail_sal":0.2917,"proc_sal":0.9338,"ops_sal":0.9176,"drivers_sal":1.3167,"others_hk":2.6326,"sales_sal":11.7981,"rental":8.1435,"zero_salary_centres":0},"RJ":{"centres":39,"deliveries":224,"tractor_sale":874.2738,"other_rev":17.51,"cancel_rev":1.014,"finance_inc":8.8748,"total_rev":901.6726,"cogs":821.5799,"yard":5.3126,"logistics":8.2161,"docs":0.5567,"rto":3.974,"refurb":22.913,"insurance":5.9892,"broker":0.15,"sales_incentive":0.7615,"retail_sal":0.4362,"proc_sal":2.1627,"ops_sal":1.3722,"drivers_sal":1.3128,"others_hk":2.0553,"sales_sal":17.5217,"rental":9.9417,"zero_salary_centres":1},"TL":{"centres":3,"deliveries":2,"tractor_sale":7.85,"other_rev":0.0,"cancel_rev":0.05,"finance_inc":0.0,"total_rev":7.9,"cogs":6.95,"yard":0.1931,"logistics":0.1056,"docs":0.0177,"rto":0.73,"refurb":0.2394,"insurance":0.1427,"broker":0.0,"sales_incentive":0.0068,"retail_sal":0.0054,"proc_sal":0.0077,"ops_sal":0.0168,"drivers_sal":0.1436,"others_hk":0.2248,"sales_sal":0.1772,"rental":0.654,"zero_salary_centres":0}},"2026-07":{"CG":{"centres":5,"deliveries":4,"tractor_sale":15.3519,"other_rev":0.055,"cancel_rev":0.0,"finance_inc":0.5668,"total_rev":15.9737,"cogs":12.79,"yard":0.3346,"logistics":0.2238,"docs":0.0311,"rto":1.4,"refurb":0.2888,"insurance":0.3395,"broker":0.0,"sales_incentive":0.0314,"retail_sal":0.0186,"proc_sal":0.0153,"ops_sal":0.0544,"drivers_sal":0.2008,"others_hk":0.242,"sales_sal":1.2716,"rental":1.14,"zero_salary_centres":2},"GJ":{"centres":4,"deliveries":11,"tractor_sale":40.5564,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.449,"total_rev":41.0054,"cogs":36.3855,"yard":0.289,"logistics":0.4125,"docs":0.0734,"rto":0.9085,"refurb":0.3676,"insurance":0.3971,"broker":0.0,"sales_incentive":0.0864,"retail_sal":0.0512,"proc_sal":0.6801,"ops_sal":0.1497,"drivers_sal":0.166,"others_hk":0.12,"sales_sal":1.1676,"rental":0.82,"zero_salary_centres":0},"MH":{"centres":10,"deliveries":19,"tractor_sale":94.5987,"other_rev":0.01,"cancel_rev":0.022,"finance_inc":2.3044,"total_rev":96.9351,"cogs":83.672,"yard":1.3297,"logistics":1.0808,"docs":0.1179,"rto":5.7953,"refurb":3.2004,"insurance":0.9518,"broker":0.1,"sales_incentive":0.1492,"retail_sal":0.0885,"proc_sal":0.4968,"ops_sal":0.2586,"drivers_sal":0.3695,"others_hk":0.0107,"sales_sal":4.2578,"rental":2.7569,"zero_salary_centres":2},"MP":{"centres":34,"deliveries":55,"tractor_sale":171.2881,"other_rev":0.21,"cancel_rev":0.448,"finance_inc":2.3616,"total_rev":174.3077,"cogs":155.8167,"yard":2.2763,"logistics":3.7776,"docs":0.3619,"rto":4.1803,"refurb":6.2699,"insurance":1.7801,"broker":0.05,"sales_incentive":0.4319,"retail_sal":0.2188,"proc_sal":1.2598,"ops_sal":0.6396,"drivers_sal":1.541,"others_hk":1.973,"sales_sal":10.6744,"rental":9.024,"zero_salary_centres":3},"RJ":{"centres":40,"deliveries":131,"tractor_sale":514.4781,"other_rev":9.845,"cancel_rev":0.653,"finance_inc":7.1758,"total_rev":532.1519,"cogs":487.707,"yard":3.1176,"logistics":4.1729,"docs":0.2697,"rto":4.2276,"refurb":11.0877,"insurance":3.7565,"broker":0.05,"sales_incentive":1.0288,"retail_sal":0.447,"proc_sal":3.3381,"ops_sal":1.3065,"drivers_sal":1.4435,"others_hk":1.7496,"sales_sal":17.8663,"rental":10.5364,"zero_salary_centres":5},"TL":{"centres":3,"deliveries":4,"tractor_sale":7.9886,"other_rev":0.0,"cancel_rev":0.05,"finance_inc":0.2323,"total_rev":8.2709,"cogs":6.76,"yard":0.4532,"logistics":0.3026,"docs":0.0097,"rto":1.19,"refurb":1.4379,"insurance":0.1459,"broker":0.05,"sales_incentive":0.0314,"retail_sal":0.0186,"proc_sal":0.0153,"ops_sal":0.0544,"drivers_sal":0.1284,"others_hk":0.23,"sales_sal":0.2999,"rental":0.693,"zero_salary_centres":0}},"2026-08":{"CG":{"centres":5,"deliveries":9,"tractor_sale":25.4105,"other_rev":0.068,"cancel_rev":0.05,"finance_inc":0.445,"total_rev":25.9735,"cogs":19.62,"yard":0.2989,"logistics":0.2916,"docs":0.0197,"rto":2.0,"refurb":0.7074,"insurance":0.4995,"broker":0.0,"sales_incentive":0.0707,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":1.14,"zero_salary_centres":5},"GJ":{"centres":4,"deliveries":13,"tractor_sale":45.3463,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.9737,"total_rev":46.32,"cogs":40.682,"yard":0.4506,"logistics":0.2976,"docs":0.0576,"rto":0.77,"refurb":0.694,"insurance":0.5459,"broker":0.0,"sales_incentive":0.1021,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":0.82,"zero_salary_centres":4},"MH":{"centres":11,"deliveries":24,"tractor_sale":121.2495,"other_rev":0.0,"cancel_rev":0.01,"finance_inc":2.907,"total_rev":124.1665,"cogs":106.1315,"yard":0.9405,"logistics":1.2916,"docs":0.1349,"rto":5.6006,"refurb":2.6477,"insurance":1.84,"broker":0.0,"sales_incentive":0.1885,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":2.7569,"zero_salary_centres":11},"MP":{"centres":34,"deliveries":64,"tractor_sale":258.7195,"other_rev":0.13,"cancel_rev":0.031,"finance_inc":4.0683,"total_rev":262.9488,"cogs":232.3625,"yard":2.0694,"logistics":4.7145,"docs":0.3736,"rto":5.7222,"refurb":4.6073,"insurance":3.5016,"broker":0.15,"sales_incentive":0.5026,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":9.024,"zero_salary_centres":34},"RJ":{"centres":40,"deliveries":78,"tractor_sale":301.5442,"other_rev":8.625,"cancel_rev":0.1,"finance_inc":5.9966,"total_rev":316.2658,"cogs":283.3194,"yard":1.5018,"logistics":3.8849,"docs":0.1379,"rto":2.88,"refurb":3.284,"insurance":4.2535,"broker":0.05,"sales_incentive":0.6126,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":10.5364,"zero_salary_centres":40},"TL":{"centres":3,"deliveries":3,"tractor_sale":5.7726,"other_rev":0.0,"cancel_rev":0.0,"finance_inc":0.0965,"total_rev":5.8691,"cogs":6.645,"yard":0.062,"logistics":0.1914,"docs":0.0,"rto":0.685,"refurb":0.6364,"insurance":0.0922,"broker":0.0,"sales_incentive":0.0236,"retail_sal":0.0,"proc_sal":0.0,"ops_sal":0.0,"drivers_sal":0.0,"others_hk":0.0,"sales_sal":0.0,"rental":0.693,"zero_salary_centres":3}}};
+
+function pnlHeatLerp(a,b,k){
+  return [Math.round(a[0]+(b[0]-a[0])*k), Math.round(a[1]+(b[1]-a[1])*k), Math.round(a[2]+(b[2]-a[2])*k)];
+}
+/* Row-relative scale: red = weakest state THIS month, green = strongest state THIS month.
+   Recomputed per row from the states actually shown (TOTAL excluded) so contrast stays
+   meaningful regardless of which month is selected. */
+function pnlHeatColor(value, range){
+  if(!range || range[1]<=range[0] || !isFinite(range[0]) || !isFinite(range[1])) return null;
+  let t = (value-range[0])/(range[1]-range[0]);
+  t = Math.max(0, Math.min(1, t));
+  const RED=[233,151,142], WHITE=[255,255,255], GREEN=[151,206,171];
+  const c = t<0.5 ? pnlHeatLerp(RED,WHITE,t/0.5) : pnlHeatLerp(WHITE,GREEN,(t-0.5)/0.5);
+  return 'rgb('+c[0]+','+c[1]+','+c[2]+')';
+}
+function pnlRowRange(cols, getter){
+  const vals = cols.filter(c=>c.key!=='TOTAL' && c.raw.deliveries>0).map(getter);
+  if(!vals.length) return null;
+  return [Math.min(...vals), Math.max(...vals)];
+}
+
+let pnlStateMonth = PNL_MONTH_KEYS.includes('2026-07') ? '2026-07' : PNL_MONTH_KEYS[PNL_MONTH_KEYS.length-1];
+let pnlStateExpanded = {revenue:true, varcost:true, salaries:true};
+
+(function pnlInitStateSelect(){
+  const sel = document.getElementById('pnlStateSel');
+  PNL_MONTH_KEYS.forEach(k=>{
+    const flag = PNL_DATA[k] && PNL_DATA[k].zero_salary_centres === PNL_DATA[k].centres ? '  ⚠' : '';
+    const opt = document.createElement('option'); opt.value = k; opt.textContent = pnlMonthLabel(k)+flag;
+    sel.appendChild(opt);
+  });
+  sel.value = pnlStateMonth;
+  sel.addEventListener('change', ()=>{ pnlStateMonth = sel.value; pnlStateRender(); });
+})();
+
+function pnlStateBuildRows(){
+  const rows = [];
+  const push = (r)=>rows.push(r);
+
+  push({type:'section', label:'Scale'});
+  push({label:'No. of centres', get:d=>d.raw.centres, dec:0, bold:true});
+  push({label:'No of Deliveries Sold', get:d=>d.raw.deliveries, dec:0, bold:true});
+  push({label:'ASP (on Total Rev)', get:d=>d.asp, dec:2, bold:true, heat:'asp'});
+
+  push({type:'section', label:'Revenue'});
+  push({label:'- Tractor Sale value', get:d=>d.raw.tractor_sale, group:'revenue'});
+  push({label:'- Other Revenue', get:d=>d.raw.other_rev, group:'revenue'});
+  push({label:'- Cancel Revenue', get:d=>d.raw.cancel_rev, group:'revenue'});
+  push({label:'- Finance Income', get:d=>d.raw.finance_inc, group:'revenue'});
+  push({label:'Total Revenue', get:d=>d.total_rev, bold:true, hl:true, toggleGroup:'revenue'});
+  push({label:'COGS', get:d=>d.raw.cogs});
+  push({label:'Trading Margin', get:d=>d.trading_margin, bold:true, subtle:true});
+  push({label:'TM %', get:d=>d.total_rev? d.trading_margin/d.total_rev:0, isPct:true, subtle:true, heat:'tmPct'});
+  push({label:'Gross Margin', get:d=>d.gross_margin, bold:true, subtle:true});
+  push({label:'GM %', get:d=>d.total_rev? d.gross_margin/d.total_rev:0, isPct:true, subtle:true, heat:'gmPct'});
+
+  push({type:'section', label:'Variable Costs (CM-1)'});
+  push({label:'- Yard Charges', get:d=>d.raw.yard, group:'varcost'});
+  push({label:'- RTO Charges', get:d=>d.raw.rto, group:'varcost'});
+  push({label:'- Refurb Cost', get:d=>d.raw.refurb, group:'varcost'});
+  push({label:'- Insurance Cost', get:d=>d.raw.insurance, group:'varcost'});
+  push({label:'- Other Charges', get:d=>d.raw.logistics+d.raw.docs+d.raw.broker+d.raw.sales_incentive, group:'varcost'});
+  push({label:'Logistics Cost', get:d=>d.raw.logistics, indent:true, group:'varcost'});
+  push({label:'Documentation Charges', get:d=>d.raw.docs, indent:true, group:'varcost'});
+  push({label:'Broker Incentive', get:d=>d.raw.broker, indent:true, group:'varcost'});
+  push({label:'Sales incentive', get:d=>d.raw.sales_incentive, indent:true, group:'varcost'});
+  push({label:'Total Variable Charges', get:d=>d.tvc, bold:true, toggleGroup:'varcost'});
+  push({label:'CM-1 Margin', get:d=>d.cm1, bold:true, subtle:true, flagNeg:true});
+  push({label:'CM-1 %age', get:d=>d.total_rev? d.cm1/d.total_rev:0, isPct:true, subtle:true, heat:'cm1Pct'});
+  push({label:'CM-1 per delivery', get:d=>d.raw.deliveries? d.cm1/d.raw.deliveries:0, dec:2});
+
+  push({type:'section', label:'Fixed Costs (CM-2)'});
+  push({label:'- Salaries', get:d=>d.salaries, bold:true, toggleGroup:'salaries'});
+  push({label:'Retail Salary', get:d=>d.raw.retail_sal, indent:true, group:'salaries'});
+  push({label:'Bank Procurement Salaries', get:d=>d.raw.proc_sal, indent:true, group:'salaries'});
+  push({label:'Operations Salaries', get:d=>d.raw.ops_sal, indent:true, group:'salaries'});
+  push({label:'Drivers Salaries', get:d=>d.raw.drivers_sal, indent:true, group:'salaries'});
+  push({label:'Others (Housekeeping)', get:d=>d.raw.others_hk, indent:true, group:'salaries'});
+  push({label:'Sales Salaries', get:d=>d.raw.sales_sal, indent:true, group:'salaries'});
+  push({label:'- Centre Rental cost', get:d=>d.raw.rental});
+  push({label:'Total Fixed Cost', get:d=>d.fixed_cost, bold:true});
+  push({label:'CM-2 Margin', get:d=>d.cm2, bold:true, subtle:true, flagNeg:true});
+  push({label:'CM-2 %age', get:d=>d.total_rev? d.cm2/d.total_rev:0, isPct:true, subtle:true, heat:'cm2Pct'});
+
+  push({type:'blank'});
+  push({label:'GM / delivery', get:d=>d.gm_per_delivery, dec:2});
+  push({label:'CM-1 Exp / delivery', get:d=>d.cm1exp_per_delivery, dec:2});
+  push({label:'CM-2 Exp / delivery', get:d=>d.cm2exp_per_delivery, dec:2});
+  push({label:'Profit &amp; Loss / delivery', get:d=>d.pnl_per_delivery, dec:2, flagNeg:true});
+
+  return rows.filter(r=> !(r.group && !pnlStateExpanded[r.group]));
+}
+
+function pnlStateRender(){
+  const monthObj = PNL_STATE_DATA[pnlStateMonth] || {};
+  const cols = STATE_ORDER.filter(st=>monthObj[st]).map(st=>{
+    const raw = monthObj[st];
+    const d = pnlDerive(raw);
+    return {key:st, label:st, raw:raw, derived:d, total_rev:d.total_rev, trading_margin:d.trading_margin,
+      gross_margin:d.gross_margin, tvc:d.tvc, cm1:d.cm1, salaries:d.salaries, fixed_cost:d.fixed_cost, cm2:d.cm2,
+      asp:d.asp, gm_per_delivery:d.gm_per_delivery, cm1exp_per_delivery:d.cm1exp_per_delivery,
+      cm2exp_per_delivery:d.cm2exp_per_delivery, pnl_per_delivery:d.pnl_per_delivery};
+  });
+  const totalRaw = pnlSumRaw(STATE_ORDER.filter(st=>monthObj[st]).map(st=>monthObj[st]));
+  const totalD = pnlDerive(totalRaw);
+  const totalCol = {key:'TOTAL', label:'TOTAL', raw:totalRaw, derived:totalD, total_rev:totalD.total_rev,
+    trading_margin:totalD.trading_margin, gross_margin:totalD.gross_margin, tvc:totalD.tvc, cm1:totalD.cm1,
+    salaries:totalD.salaries, fixed_cost:totalD.fixed_cost, cm2:totalD.cm2, asp:totalD.asp,
+    gm_per_delivery:totalD.gm_per_delivery, cm1exp_per_delivery:totalD.cm1exp_per_delivery,
+    cm2exp_per_delivery:totalD.cm2exp_per_delivery, pnl_per_delivery:totalD.pnl_per_delivery};
+  cols.push(totalCol);
+
+  // header row
+  const headRow = document.getElementById('pnlStateHeadRow');
+  headRow.innerHTML = '<th class="lbl">Metric</th>' + cols.map(c=>
+    '<th'+(c.key==='TOTAL'?' class="total-col"':'')+'>'+c.label+'</th>').join('');
+
+  const rows = pnlStateBuildRows();
+  const tbody = document.getElementById('pnlStateTbody');
+  tbody.innerHTML = '';
+
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    if(r.type==='section'){
+      tr.className = 'section-row';
+      const td = document.createElement('td'); td.colSpan = cols.length+1; td.textContent = r.label;
+      tr.appendChild(td); tbody.appendChild(tr); return;
+    }
+    if(r.type==='blank'){
+      const td = document.createElement('td'); td.colSpan = cols.length+1; td.innerHTML = '&nbsp;';
+      tr.appendChild(td); tbody.appendChild(tr); return;
+    }
+    if(r.bold) tr.className += ' total-row';
+    tr.className = tr.className.trim();
+
+    const metricTd = document.createElement('td');
+    metricTd.className = 'lbl metric' + (r.indent ? ' pnl-sub' : '');
+    let labelHtml = r.label;
+    if(r.toggleGroup){
+      const isOpen = pnlStateExpanded[r.toggleGroup];
+      tr.dataset.toggle = r.toggleGroup;
+      labelHtml = '<span class="caret">'+(isOpen?'▾':'▸')+'</span>'+r.label;
+    }
+    metricTd.innerHTML = labelHtml;
+    tr.appendChild(metricTd);
+
+    const rowRange = r.heat ? pnlRowRange(cols, r.get) : null;
+
+    cols.forEach(c=>{
+      const td = document.createElement('td');
+      td.className = 'num' + (c.key==='TOTAL' ? ' total-col' : '');
+      const v = r.get(c);
+      const dec = r.dec===undefined ? 2 : r.dec;
+      let html = r.isPct ? pnlFmtPct(v, 1) : pnlFmt(v, dec);
+      td.innerHTML = html;
+      if(r.flagNeg && v<0) td.classList.add('neg');
+      if(r.heat && c.key!=='TOTAL' && c.raw.deliveries>0){
+        const color = pnlHeatColor(v, rowRange);
+        if(color) td.style.background = color;
+      }
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll('tr[data-toggle]').forEach(tr=>{
+    tr.addEventListener('click', ()=>{
+      const key = tr.dataset.toggle;
+      pnlStateExpanded[key] = !pnlStateExpanded[key];
+      pnlStateRender();
+    });
+  });
+
+  // insights strip
+  const stateCols = cols.filter(c=>c.key!=='TOTAL' && c.raw.deliveries>0);
+  const insightsEl = document.getElementById('pnlStateInsights');
+  insightsEl.innerHTML = '';
+  if(stateCols.length){
+    const withGm = stateCols.map(c=>({key:c.key, gmPct: c.total_rev? c.gross_margin/c.total_rev:0,
+      cm2Pct: c.total_rev? c.cm2/c.total_rev:0, asp:c.asp}));
+    const bestGm = withGm.reduce((a,b)=> b.gmPct>a.gmPct?b:a);
+    const worstCm2 = withGm.reduce((a,b)=> b.cm2Pct<a.cm2Pct?b:a);
+    const bestAsp = withGm.reduce((a,b)=> b.asp>a.asp?b:a);
+    const chips = [
+      {cls:'good', html:'Strongest GM%: <b>'+bestGm.key+'</b> ('+pnlFmtPct(bestGm.gmPct,1)+')'},
+      {cls:'bad', html:'Weakest CM-2%: <b>'+worstCm2.key+'</b> ('+pnlFmtPct(worstCm2.cm2Pct,1)+')'},
+      {cls:'', html:'Highest ASP: <b>'+bestAsp.key+'</b> (₹'+pnlFmt(bestAsp.asp,2)+'L)'}
+    ];
+    chips.forEach(ch=>{
+      const div = document.createElement('div');
+      div.className = 'pnl-insight-chip'+(ch.cls?' '+ch.cls:'');
+      div.innerHTML = ch.html;
+      insightsEl.appendChild(div);
+    });
+  }
+
+  // data-quality banner
+  const flagged = cols.filter(c=>c.key!=='TOTAL' && c.raw.centres>0 && c.raw.zero_salary_centres===c.raw.centres).map(c=>c.key);
+  const banner = document.getElementById('pnlStateBanner');
+  if(flagged.length){
+    banner.innerHTML = '⚠ <b>'+flagged.join(', ')+'</b> show ₹0 salary cost across every centre this month — payroll looks unposted. Their fixed-cost and CM-2 figures will be understated.';
+    banner.hidden = false;
+  } else {
+    banner.hidden = true;
+  }
+}
+
+function pnlSwitchView(which){
+  document.getElementById('pnlTabMoM').classList.toggle('active', which==='mom');
+  document.getElementById('pnlTabState').classList.toggle('active', which==='state');
+  document.getElementById('pnlMoMView').hidden = which!=='mom';
+  document.getElementById('pnlStateView').hidden = which!=='state';
+  if(which==='state') pnlStateRender();
+}
+document.getElementById('pnlTabMoM').addEventListener('click', ()=>pnlSwitchView('mom'));
+document.getElementById('pnlTabState').addEventListener('click', ()=>pnlSwitchView('state'));
+</script>
+
 </body>
 </html>
