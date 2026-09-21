@@ -296,6 +296,12 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
     </div>
   </header>
 
+  <div class="panel filters-panel">
+    <h2>Filters</h2>
+    <div id="filterBar"></div>
+    <button class="clear-btn" id="clearFiltersBtn">Clear all filters</button>
+  </div>
+
   <div class="kpi-bar" id="kpiBar"></div>
 
   <div class="panel apikey-panel">
@@ -322,7 +328,7 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
   <div class="panel upload-panel">
     <div class="upload-row">
       <label class="upload-title">Add Monthly Data (.xlsx)</label>
-      <span class="apikey-hint">File must have a header row with "State" and "Center" columns (same format as your working sheet export).</span>
+      <span class="apikey-hint">File must have a header row with "State" and "Center" columns (same format as your working sheet export). If the workbook also has a "center data" sheet (Month/State/salary/rent columns), Company P&amp;L is refreshed from it automatically in the same upload.</span>
       <div class="upload-controls">
         <label class="radio-lbl"><input type="radio" name="uploadMode" value="append" checked> Append / update deals <span class="apikey-hint">(updates matching RC No.)</span></label>
         <label class="radio-lbl"><input type="radio" name="uploadMode" value="replace"> Replace entire dataset</label>
@@ -332,24 +338,7 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
     </div>
   </div>
 
-  <div class="panel upload-panel">
-    <div class="upload-row">
-      <label class="upload-title">Update Company P&amp;L / Centre Data (.xlsx)</label>
-      <span class="apikey-hint">Upload an export of the "center data" sheet (Month, Center Name, State Name, revenue/cost/salary columns) to refresh the Company P&amp;L page offline. This replaces the P&amp;L dataset with the file's contents.</span>
-      <div class="upload-controls">
-        <input type="file" id="centerExcelUploadInput" accept=".xlsx,.xls">
-      </div>
-      <div id="centerUploadStatus" class="upload-status"></div>
-    </div>
-  </div>
-
   <div class="layout">
-    <div class="panel filters-panel">
-      <h2>Filters</h2>
-      <div id="filterBar"></div>
-      <button class="clear-btn" id="clearFiltersBtn">Clear all filters</button>
-    </div>
-
     <div class="main-col">
 
       <div class="panel" id="chartsPanel">
@@ -985,12 +974,28 @@ async function handleFileUpload(file){
     renderAll();
 
     const verb = mode==='replace' ? 'Replaced dataset with' : 'Added';
-    setUploadStatus(
-      `✓ ${verb} ${added.toLocaleString('en-IN')} deal${added!==1?'s':''}` +
+    let statusMsg = `✓ ${verb} ${added.toLocaleString('en-IN')} deal${added!==1?'s':''}` +
       (updated? ` and updated ${updated.toLocaleString('en-IN')} existing deal${updated!==1?'s':''}` : '') +
-      `. Total dataset now: ${BASE_ROWS.length.toLocaleString('en-IN')} deals.`,
-      'ok'
-    );
+      `. Total dataset now: ${BASE_ROWS.length.toLocaleString('en-IN')} deals.`;
+
+    // Same workbook usually also carries the "center data" sheet (CM-1 + salaries/rent
+    // through CM-2) — refresh Company P&L from it too, in this same upload.
+    const centerSheetName = wb.SheetNames.find(n=>/center|centre/i.test(n));
+    if(centerSheetName && typeof parseCenterRows === 'function'){
+      try{
+        const centerAoa = XLSX.utils.sheet_to_json(wb.Sheets[centerSheetName], { header:1, raw:true, defval:null });
+        const centerRows = parseCenterRows(centerAoa);
+        if(centerRows.length){
+          applyCenterRows(centerRows, 'Excel upload (' + centerSheetName + ')');
+          statusMsg += ` Also updated Company P&L with ${centerRows.length.toLocaleString('en-IN')} centre-months from "${centerSheetName}".`;
+        }
+      }catch(centerErr){
+        console.error('Centre data sheet in uploaded workbook could not be parsed:', centerErr);
+        statusMsg += ' (Company P&L sheet in this file could not be read — see console.)';
+      }
+    }
+
+    setUploadStatus(statusMsg, 'ok');
     if(!persisted) setUploadStatus('Dataset loaded for this session, but browser storage was unavailable; it may reset on refresh.', 'error');
   }catch(err){
     setUploadStatus('Error: ' + err.message, 'error');
@@ -2931,35 +2936,6 @@ function loadCenterData(isManual){
   document.head.appendChild(script);
 }
 
-function setCenterUploadStatus(text, cls){
-  const el = document.getElementById('centerUploadStatus');
-  if(!el) return;
-  el.textContent = text;
-  el.className = 'upload-status' + (cls? ' '+cls : '');
-}
-async function handleCenterFileUpload(file){
-  if(!file) return;
-  setCenterUploadStatus('Reading "'+file.name+'"…', '');
-  if(typeof XLSX === 'undefined'){
-    setCenterUploadStatus('Error: the Excel-reading library failed to load from the CDN (no internet access, or it is blocked in this environment).', 'error');
-    return;
-  }
-  try{
-    const buf = await file.arrayBuffer();
-    const wb = XLSX.read(buf, { type:'array', cellDates:true });
-    const sheetName = wb.SheetNames.find(n=>/center|centre/i.test(n)) || wb.SheetNames[0];
-    const ws = wb.Sheets[sheetName];
-    const aoa = XLSX.utils.sheet_to_json(ws, { header:1, raw:true, defval:null });
-    const rows = parseCenterRows(aoa);
-    if(!rows.length) throw new Error('No rows recognised — check the file has "Month" and "State Name" header columns like the "center data" sheet.');
-    applyCenterRows(rows, 'Excel upload (' + sheetName + ')');
-    setCenterUploadStatus('✓ Loaded ' + rows.length.toLocaleString('en-IN') + ' centre-months from "'+file.name+'". Company P&L now reflects this file.', 'ok');
-  }catch(err){
-    setCenterUploadStatus('Error: ' + err.message, 'error');
-    console.error(err);
-  }
-}
-
 /* Seed from the last successful sync (localStorage) so a reload shows fresh figures
    immediately, then kick off a live fetch to pick up anything newer. */
 (function pnlSeedFromCache(){
@@ -2971,11 +2947,6 @@ async function handleCenterFileUpload(file){
 })();
 
 document.getElementById('cloudRefreshBtn').addEventListener('click', ()=> loadCenterData(true));
-document.getElementById('centerExcelUploadInput').addEventListener('change', (e)=>{
-  const file = e.target.files[0];
-  if(file) handleCenterFileUpload(file);
-  e.target.value = '';
-});
 loadCenterData(false);
 setInterval(()=> loadCenterData(false), CLOUD_REFRESH_MS);
 </script>
