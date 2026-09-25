@@ -38,12 +38,13 @@ header.topbar .sub{font-size:12px; color:#B9CBDD; margin-top:2px;}
 .kpi-bar{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px;}
 .kpi{
   background:var(--card); border:1px solid var(--border); border-radius:10px;
-  padding:12px 16px; min-width:120px; flex:1;
+  padding:12px 16px; min-width:max-content; flex:1 1 0;
+  display:flex; flex-direction:column; justify-content:flex-start;
   box-shadow:0 1px 2px rgba(15,42,71,.04);
 }
 .kpi.neg{border-color:#F1B3AE; background:var(--red-bg);}
-.kpi-label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px;}
-.kpi-val{font-size:20px; font-weight:700; color:var(--navy);}
+.kpi-label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; white-space:nowrap;}
+.kpi-val{font-size:20px; font-weight:700; color:var(--navy); white-space:nowrap;}
 .kpi-amount{font-size:11px; color:var(--muted); margin-top:3px;}
 .kpi.neg .kpi-val{color:var(--red);}
 
@@ -55,13 +56,16 @@ header.topbar .sub{font-size:12px; color:#B9CBDD; margin-top:2px;}
 }
 .panel h2{font-size:14px; margin:0 0 12px; color:var(--navy); font-weight:700; display:flex; justify-content:space-between; align-items:center;}
 
-#filterBar{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; align-items:start;}
+#filterBar{display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start;}
+#filterBar .filter-group{flex:1 1 auto;}
+#filterBar .filter-title{white-space:nowrap; justify-content:center; background:#E6F6EE; border-color:#BFE3D2;}
+#filterBar .filter-title:hover, #filterBar .filter-group.open .filter-title{background:#D4EFE2; border-color:var(--teal);}
 .filter-group{margin:0; position:relative; min-width:0;}
 .filter-title{width:100%; min-height:34px; display:flex; align-items:center; justify-content:flex-start; gap:5px; padding:8px 10px; border:1px solid var(--border); border-radius:7px; background:#F8FBFC; color:var(--navy-2); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; cursor:pointer; text-align:left;}
 .filter-title::after{content:'▾'; color:var(--muted); font-size:10px; transition:transform .12s;}
 .filter-group.open .filter-title::after{transform:rotate(180deg);}
 .filter-title:hover{border-color:var(--teal); background:#F1FAF8;}
-.filter-options{display:none; position:absolute; z-index:10; top:calc(100% + 6px); left:0; min-width:100%; max-width:300px; max-height:300px; overflow:auto; padding:9px; background:#fff; border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 20px rgba(15,42,71,.12);}
+.filter-options{display:none; position:absolute; z-index:10; top:calc(100% + 6px); left:0; width:max-content; min-width:100%; max-width:300px; max-height:300px; overflow:auto; padding:9px; background:#fff; border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 20px rgba(15,42,71,.12);}
 .filter-group.open .filter-options{display:block;}
 .filter-group.open{z-index:11;}
 .badge{background:var(--teal); color:#fff; border-radius:9px; padding:0 6px; font-size:10px; margin-left:4px;}
@@ -99,6 +103,12 @@ td.metric-pct{font-weight:700;}
 .total-row{font-weight:700; background:#F0F3F6;}
 .totalcol{background:#EFF3F6; font-weight:700;}
 table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
+table.pivot th[rowspan], table.pivot th.grp-head, table.pivot th.src-head{position:static;}
+table.pivot th[rowspan]{vertical-align:middle;}
+table.pivot th.grp-head{text-align:center; font-size:12.5px; letter-spacing:.3px; border-left:2px solid #fff; border-bottom:1px solid rgba(255,255,255,.35);}
+table.pivot th.src-head{background:var(--navy-2); font-weight:500; font-size:11px;}
+table.pivot .grp-start{border-left:2px solid var(--border);}
+table.pivot th.src-head.grp-start{border-left-color:#fff;}
 
 .table-wrap{overflow-x:auto;}
 
@@ -174,9 +184,18 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
 .buy-grade-summary .expensive{color:#A51D1D;}
 .buy-grade-summary .cheap{color:#176B3A;}
 .grade-table-wrap{max-height:520px; overflow:auto; margin-top:12px;}
+#dealTableWrap .grade-table-wrap{max-height:calc(100vh - 190px); margin-top:0;}
 .bad-sale-table-wrap{max-height:420px; overflow:auto; margin-top:12px;}
 .dept-issue{background:var(--red-bg); color:var(--red); font-weight:700;}
 .dept-ok{background:#DDF4E5; color:#176B3A; font-weight:700;}
+table.deal-table th{vertical-align:bottom; line-height:1.25;}
+table.deal-table th{padding:8px 8px;}
+table.deal-table th.has-filter{white-space:nowrap; min-width:90px;}
+table.deal-table th.has-filter .th-label{display:block; margin-bottom:5px;}
+table.deal-table td{white-space:nowrap; vertical-align:middle;}
+table.deal-table .deal-filter-select{display:block; box-sizing:border-box; width:100%; min-width:0; max-width:100%; margin:0; height:24px; padding:2px 4px; font-size:11px; border-radius:5px; cursor:pointer;}
+table.deal-table .deal-filter-select:focus{outline:2px solid var(--teal); outline-offset:0;}
+table.deal-table .tier-detail{display:block; font-size:10px; color:var(--muted);}
 .deal-filter-select{width:100%; margin-top:4px; padding:3px 4px; border:1px solid #C7D2DF; border-radius:4px; background:#fff; color:var(--text); font-size:10px; font-weight:400;}
 .proc-num{font-size:20px; font-weight:700; color:var(--navy);}
 .proc-cards .proc-num{font-size:17px;}
@@ -292,6 +311,7 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
     <div style="display:flex; align-items:center;">
       <div id="rowCount"></div>
       <button class="chat-launch-btn" id="openTable1Btn">▦ Model / Center</button>
+      <button class="chat-launch-btn" id="openDealTableBtn">☰ Deal Table</button>
       <button class="chat-launch-btn" id="openPnlBtn">📊 Company P&amp;L</button>
     </div>
   </header>
@@ -391,6 +411,21 @@ table.pivot th .subhead{font-weight:400; opacity:.85; font-size:10px;}
   <div class="chat-fullpage-body">
     <div class="panel">
       <div class="table-wrap" id="table1Wrap"></div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-fullpage table1-fullpage" id="dealTableFullpage">
+  <div class="chat-fullpage-header">
+    <div>
+      <h2>Deal-level Buy / Sell Grades</h2>
+      <div class="sub">Full table view — uses the current dashboard filters</div>
+    </div>
+    <button class="chat-back-btn" id="closeDealTableBtn">← Back to Dashboard</button>
+  </div>
+  <div class="chat-fullpage-body">
+    <div class="panel">
+      <div id="dealTableWrap"></div>
     </div>
   </div>
 </div>
@@ -1117,9 +1152,12 @@ function renderFilters(){
     title.type = 'button';
     title.className = 'filter-title';
     title.innerHTML = `${FIELD_LABELS[key]} ${activeCount? `<span class="badge">${activeCount}</span>`:''}`;
+    box.dataset.key = key;
     title.addEventListener('click', ()=>{
-      if(OPEN_FILTERS.has(key)) OPEN_FILTERS.delete(key); else OPEN_FILTERS.add(key);
-      box.classList.toggle('open', OPEN_FILTERS.has(key));
+      const wasOpen = OPEN_FILTERS.has(key);
+      OPEN_FILTERS.clear();
+      if(!wasOpen) OPEN_FILTERS.add(key);
+      container.querySelectorAll('.filter-group').forEach(g=>g.classList.toggle('open', OPEN_FILTERS.has(g.dataset.key)));
     });
     box.appendChild(title);
 
@@ -1141,6 +1179,14 @@ function renderFilters(){
     });
   });
 }
+
+// Close open filter dropdowns when clicking anywhere outside them.
+// pointerdown fires before checkbox changes re-render the filter bar.
+document.addEventListener('pointerdown', (e)=>{
+  if(!OPEN_FILTERS.size || e.target.closest('#filterBar .filter-group')) return;
+  OPEN_FILTERS.clear();
+  document.querySelectorAll('#filterBar .filter-group.open').forEach(g=>g.classList.remove('open'));
+});
 
 function clearFilters(){
   FILTER_KEYS.forEach(k=>CONFIG.filters[k]=[]);
@@ -1225,19 +1271,21 @@ function renderTable2(rows){
   const types = ["Center's","Broker"];
   const total = rows.length;
 
-  let head = `<tr><th class="lbl">Metric</th>`;
-  types.forEach(t=>{ sources.forEach(s=> head += `<th>${t}<br><span class="subhead">${s}</span></th>`); });
-  head += `<th class="totalcol">Total</th></tr>`;
+  let head = `<tr><th class="lbl" rowspan="2">Metric</th>`;
+  types.forEach(t=>{ head += `<th class="grp-head" colspan="${sources.length}">${t}</th>`; });
+  head += `<th class="totalcol" rowspan="2">Total</th></tr><tr>`;
+  types.forEach(()=>{ sources.forEach((s,i)=> head += `<th class="src-head${i===0?' grp-start':''}">${s}</th>`); });
+  head += `</tr>`;
 
   const cellsFor = (metricKey, fmt)=>{
     let row = '';
     const valueClass = ['tmPct','gmPct','cm1Pct'].includes(metricKey) ? ' metric-pct' : '';
     types.forEach(t=>{
-      sources.forEach(s=>{
+      sources.forEach((s,i)=>{
         const rs = rows.filter(r=>r.ctype===t && r.src===s);
         const m = metricsFor(rs);
         const val = metricKey==='qty'? m.qty : m[metricKey];
-        row += `<td class="${valueClass} ${cellClass(metricKey, val)}">${fmt(val,m)}</td>`;
+        row += `<td class="${valueClass} ${cellClass(metricKey, val)}${i===0?' grp-start':''}">${fmt(val,m)}</td>`;
       });
     });
     const mAll = metricsFor(rows);
@@ -1377,7 +1425,7 @@ function computePeerBenchmark(rows){
 function renderProcurement(rows){
   const wrap = document.getElementById('procWrap');
   if(!wrap) return;
-  if(!CONFIG.view.showProcurement){ wrap.innerHTML=''; return; }
+  if(!CONFIG.view.showProcurement){ wrap.innerHTML=''; document.getElementById('dealTableWrap').innerHTML=''; return; }
   computePeerBenchmark(DATA);
   const tableRows = rows.filter(r=>DEAL_TABLE_FILTER_KEYS.every(key=>!DEAL_TABLE_FILTERS[key] || String(r[key]??'')===DEAL_TABLE_FILTERS[key]));
   const badSaleAll = rows.filter(r=>r._sellGrade==='Bad Sale');
@@ -1469,9 +1517,18 @@ function renderProcurement(rows){
 
   const filterHeader = (key, label, className='')=>{
     const values = Array.from(new Set(rows.map(r=>String(r[key]??'')).filter(Boolean))).sort();
-    return `<th class="${className}">${label}<select class="deal-filter-select" data-deal-filter="${key}"><option value="">All</option>${values.map(value=>`<option value="${value}" ${DEAL_TABLE_FILTERS[key]===value?'selected':''}>${value}</option>`).join('')}</select></th>`;
+    return `<th class="has-filter ${className}"><span class="th-label">${label}</span><select class="deal-filter-select" data-deal-filter="${key}"><option value="">All</option>${values.map(value=>`<option value="${value}" ${DEAL_TABLE_FILTERS[key]===value?'selected':''}>${value}</option>`).join('')}</select></th>`;
   };
-  html += `<div class="grade-table-wrap"><table class="datatable"><thead><tr>
+  // "Tier-1 (Source+Make+Model+Vintage)" -> "Tier-1" with the grouping shown small underneath
+  const tierCell = tier=>{
+    const m = String(tier||'').match(/^(.*?)\s*\((.*)\)$/);
+    return m ? `${m[1]}<span class="tier-detail">${m[2]}</span>` : (tier||'-');
+  };
+  wrap.innerHTML = html;
+
+  // Deal-level table lives in its own full-page view (opened from the "Deal Table" button).
+  const dealWrap = document.getElementById('dealTableWrap');
+  html = `<div class="grade-table-wrap"><table class="datatable deal-table"><thead><tr>
     ${filterHeader('rc','RC No')}${filterHeader('ct','Center','lbl')}${filterHeader('src','Source')}${filterHeader('mk','Make','lbl')}${filterHeader('md','Model','lbl')}${filterHeader('vt','Vintage')}
     ${filterHeader('_peerTier','Peer Tier')}<th>Peer Group Deals</th><th>Peer Median PP</th><th>Purchase Price</th><th>PP Dev.</th>${filterHeader('_buyGrade','Buy Grade')}
     <th>Peer Median TM%</th><th>TM%</th><th>TM Dev.</th>${filterHeader('_sellGrade','Sell Grade')}${filterHeader('_deptAtFault','Dept At Fault')}
@@ -1480,14 +1537,14 @@ function renderProcurement(rows){
     const gradeClass = grade=>grade.includes('Good') || grade.includes('Cheap') || grade==='No Issue' ? 'grade-good' : grade.includes('Bad') || grade.includes('Expensive') || grade.includes('Both') ? 'grade-bad' : 'grade-fair';
     html += `<tr>
       <td>${r.rc||'-'}</td><td class="lbl">${r.ct||'-'}</td><td>${r.src||'-'}</td><td class="lbl">${r.mk||'-'}</td><td class="lbl">${r.md||'-'}</td><td>${r.vt||'-'}</td>
-      <td>${r._peerTier}</td><td>${fmtNum(r._peerGroupSize)}</td><td>${r._peerMedian?fmtLakh(r._peerMedian):'-'}</td><td>${fmtLakh(r.pp)}</td><td>${r._peerMedian?fmtPct(r._ppDeviation):'-'}</td>
+      <td>${tierCell(r._peerTier)}</td><td>${fmtNum(r._peerGroupSize)}</td><td>${r._peerMedian?fmtLakh(r._peerMedian):'-'}</td><td>${fmtLakh(r.pp)}</td><td>${r._peerMedian?fmtPct(r._ppDeviation):'-'}</td>
       <td class="${gradeClass(r._buyGrade)}">${r._buyGrade}</td><td>${r._peerTMMedian?fmtPct(r._peerTMMedian):'-'}</td><td>${fmtPct(r.tmPct)}</td><td>${r._peerTMMedian?fmtPct(r._tmDeviation):'-'}</td>
       <td class="${gradeClass(r._sellGrade)}">${r._sellGrade}</td><td class="${gradeClass(r._deptAtFault)}">${r._deptAtFault}</td>
     </tr>`;
   });
   html += `</tbody></table></div>`;
-  wrap.innerHTML = html;
-  wrap.querySelectorAll('[data-deal-filter]').forEach(select=>{
+  dealWrap.innerHTML = html;
+  dealWrap.querySelectorAll('[data-deal-filter]').forEach(select=>{
     select.addEventListener('change', e=>{
       DEAL_TABLE_FILTERS[e.target.dataset.dealFilter] = e.target.value;
       renderAll();
@@ -1908,6 +1965,12 @@ document.getElementById('openTable1Btn').addEventListener('click', ()=>{
 });
 document.getElementById('closeTable1Btn').addEventListener('click', ()=>{
   document.getElementById('table1Fullpage').classList.remove('open');
+});
+document.getElementById('openDealTableBtn').addEventListener('click', ()=>{
+  document.getElementById('dealTableFullpage').classList.add('open');
+});
+document.getElementById('closeDealTableBtn').addEventListener('click', ()=>{
+  document.getElementById('dealTableFullpage').classList.remove('open');
 });
 document.getElementById('openInsightsBtn').addEventListener('click', ()=>{
   document.getElementById('insightsFullpage').classList.add('open');
