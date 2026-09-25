@@ -484,6 +484,9 @@ table.deal-table .tier-detail{display:block; font-size:10px; color:var(--muted);
 .pnl-insight-chip b{color:var(--navy);}
 .pnl-insight-chip.good b{color:var(--green);}
 .pnl-insight-chip.bad b{color:var(--red);}
+/* Freeze the header row (Metric / RJ / MP / … / TOTAL) while scrolling P&L tables */
+#companyPnlFullpage .table-wrap{max-height:calc(100vh - 150px); overflow:auto;}
+#companyPnlFullpage table.datatable thead th{position:sticky; top:0; z-index:3; box-shadow:0 2px 0 rgba(15,42,71,.15);}
 .pnl-state-table th.total-col, .pnl-state-table td.total-col{background:#FBEEC7;}
 .pnl-state-table th.total-col{color:var(--navy);}
 .pnl-state-table td.total-col{font-weight:700;}
