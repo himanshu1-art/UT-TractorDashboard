@@ -488,6 +488,8 @@ table.deal-table .tier-detail{display:block; font-size:10px; color:var(--muted);
 #companyPnlFullpage .table-wrap{max-height:calc(100vh - 150px); overflow:auto;}
 #companyPnlFullpage table.datatable thead th{position:sticky; top:0; z-index:3; box-shadow:0 2px 0 rgba(15,42,71,.15);}
 .pnl-state-table th.total-col, .pnl-state-table td.total-col{background:#FBEEC7;}
+/* padding is offset by equal negative margin so the digits stay on the same right edge as unshaded cells */
+.heat-pill{display:inline-block; min-width:52px; padding:2px 8px; margin:-2px -8px -2px 0; border-radius:5px; text-align:right; box-sizing:content-box;}
 .pnl-state-table th.total-col{color:var(--navy);}
 .pnl-state-table td.total-col{font-weight:700;}
 </style>
@@ -2731,7 +2733,7 @@ function pnlStateRender(){
       if(r.flagNeg && v<0) td.classList.add('neg');
       if(r.heat && c.key!=='TOTAL' && c.raw.deliveries>0){
         const color = pnlHeatColor(v, rowRange);
-        if(color) td.style.background = color;
+        if(color) td.innerHTML = `<span class="heat-pill" style="background:${color}">${html}</span>`;
       }
       tr.appendChild(td);
     });
